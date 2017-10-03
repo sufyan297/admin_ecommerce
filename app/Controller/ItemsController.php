@@ -30,6 +30,18 @@ class ItemsController extends AppController
         $this->layout = 'base_layout';
         $this -> set('page_title', 'Add Item');
 
+        //getItemCategories
+        $item_categories = $this->ItemCategory->find('list',
+            [
+                'conditions' => [
+                    'ItemCategory.is_active' => 1,
+                    'ItemCategory.del_flag !=' => 1
+                ]
+            ]
+        );
+        //Setters
+        $this->set('item_categories', $item_categories);
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--==-=-
         if($this->request->is('post'))
         {
             $data = $this->request->data;
