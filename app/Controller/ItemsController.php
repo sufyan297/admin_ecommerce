@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class ItemsController extends AppController
 {
     public $components = array('Paginator');
-    public $uses = array('Variant','VariantProperty');
+    public $uses = array('ItemCategory','Item');
 
     public function beforeFilter()
     {
