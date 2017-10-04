@@ -8,6 +8,8 @@
 	<?php
 		echo $this->Session->flash();
 	?>
+    <!-- form start -->
+    <?php echo $this->Form->create('Item',array('class'=>'form-signin','type'=>'file','role'=>'form', 'multiple')); ?>
 
 	<div class="row">
 		<div class="col-md-12">
@@ -16,14 +18,16 @@
 	            <h3 class="box-title">Item Details</h3>
 
 		            <div class="box-tools pull-right">
+                        <a href="<?= $this->Html->url(array('controller' => 'items', 'action' => 'view')) ?>" class="btn btn-box-tool">
+                            <i class="fa fa-arrow-left"></i>
+                        </a>
+
 		                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
 		                </button>
 		                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
 		            </div>
 	            </div>
 	            <!-- /.box-header -->
-	            <!-- form start -->
-				<?php echo $this->Form->create('Item',array('class'=>'form-signin','type'=>'file','role'=>'form', 'multiple')); ?>
 	              <div class="box-body">
 
                       <!-- Row -->
@@ -32,7 +36,7 @@
                               <div class="form-group">
                                 <label for="inputName">Name<span style='color: red;'>*</span></label>
                                 <?php echo $this->Form->input('name',array(
-                                    'id' => 'inputName',
+                                  'id' => 'inputName',
                                   'class'=>"form-control",
                                   'placeholder'=>'Enter Item Name',
                                   'label'=>false,
@@ -47,7 +51,7 @@
                               <div class="form-group">
                                 <label for="inputKeywords">Keywords</label>
                                 <?php echo $this->Form->input('keyword',array(
-                                    'id' => 'inputKeywords',
+                                  'id' => 'inputKeywords',
                                   'class'=>"form-control",
                                   'placeholder'=>'Enter Keywords',
                                   'label'=>false,
@@ -115,15 +119,54 @@
 	            	</div>
 	              <!-- /.box-body -->
 
+	        </div>
+		</div>
+	</div>
+
+
+    <!-- Item Variants -->
+    <div class="row">
+		<div class="col-md-12">
+			<div class="box box-primary">
+				<div class="box-header with-border">
+	            <h3 class="box-title">Upload Primary Photo</h3>
+
+		            <div class="box-tools pull-right">
+		                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+		                </button>
+		                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+		            </div>
+	            </div>
+	            <!-- /.box-header -->
+	              <div class="box-body">
+
+                      <!-- Row Start -->
+                      <div class="row">
+                          <div class="col-md-3">
+                              <div class="form-group">
+                                <label for="inputPhoto">Photo<span style='color: red;'>*</span></label>
+                                <?php
+                                    echo $this->Form->input("image_file",array('id'=>'inputPhoto','type'=>'file','class'=>'form-control','label'=>false,'autofocus'=>true,'required'=>'required'));
+                                ?>
+                              </div>
+                          </div>
+
+                      </div>
+                      <!-- Row Ends Here -->
+	            	</div>
+	                <!-- /.box-body -->
+
 		            <div class="box-footer">
 						<?php
 							echo $this->Form->input('Add Item',array('class'=>'btn btn-primary pull-right','type'=>'submit','label'=>false));
 						?>
 		            </div>
-				  	<?php echo $this->Form->end(); ?>
 	        </div>
 		</div>
 	</div>
+    <?php echo $this->Form->end(); ?>
+
+    <!-- Item Variants ends here -->
 </section>
 
 <?php $this->end('main-content'); ?>

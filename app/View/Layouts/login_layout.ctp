@@ -18,12 +18,22 @@
     echo $this->Html->css('AdminLTE.min');
     echo $this->Html->css('iCheck/square/blue');
   ?>
+  <style>
+    body {
+        background-image: url('https://unsplash.it/1366/768/?random&blur');
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        /*width: 100%;*/
+        height: 100%;
+    }
+  </style>
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition">
 <div class="login-box">
     <div class="login-logo">
         <!-- <span><i style="vertical-align: middle;" class="icon fa fa-newspaper-o"></i></span> -->
-      <a href="#"><b>Krerum</b></a>
+      <a href="#" style="color: white;"><b>Krerum</b></a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">

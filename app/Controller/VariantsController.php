@@ -193,7 +193,8 @@ class VariantsController extends AppController
             'order' => 'VariantProperty.created DESC',
             'conditions' => [
                 'VariantProperty.is_active' => 1,
-                'VariantProperty.del_flag !=' => 1
+                'VariantProperty.del_flag !=' => 1,
+                'VariantProperty.variant_id' => $id
             ]
         );
         $data = $this->Paginator->paginate('VariantProperty');

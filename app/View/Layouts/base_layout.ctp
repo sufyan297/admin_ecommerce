@@ -16,22 +16,42 @@
     <?php
         echo $this->Html->css('font-awesome.min');
         echo $this->Html->css('ionicons.min');
+        echo $this->Html->css('select2.min');
         echo $this->Html->css('AdminLTE.min');
         echo $this->Html->css('_all-skins.min');
         echo $this->Html->css('bootstrap-datepicker3.min');
 
 
         echo $this->Html->script('jQuery/jquery-2.2.3.min');
+        //Angular
+        echo $this->Html->script('angular.min');
+        echo $this->Html->script('angular-growl.min');
+
+        //-------------------------
         echo $this->Html->script('bootstrap.min');
         echo $this->Html->script('slimScroll/jquery.slimscroll.min');
         echo $this->Html->script('fastclick/fastclick.min');
+
+        echo $this->Html->script('select2.min');
+
         echo $this->Html->script('app.min');
         echo $this->Html->script('bootstrap-datepicker.min');
         echo $this->Html->script('my_func');
 
+
+        //Base App
+        echo $this->Html->script('app');
+
+        //Controllers
+        echo $this->Html->script('controllers/EditItemController');
+
     ?>
+<script>
+    var baseUrl = "<?php echo $this->webroot; ?>";
+</script>
 </head>
-<body class="hold-transition skin-red-light sidebar-mini">
+<body class="hold-transition skin-red-light sidebar-mini" ng-app="krerum">
+<div growl></div>
 <!-- Site wrapper -->
 <div class="wrapper">
     <header class="main-header">

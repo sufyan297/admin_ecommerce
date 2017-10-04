@@ -25,8 +25,6 @@
   <span class="fa fa-lock form-control-feedback"></span>
 </div>
 <?php
-	echo $this->Form->input('Login',array('class'=>'btn btn-warning btn-block btn-flat','type'=>'submit','label'=>false));
+	echo $this->Form->input('Login',array('class'=>'btn btn-danger btn-block btn-flat','type'=>'submit','label'=>false));
 ?>
-
-
 <?php echo $this->Form->end(); ?>
