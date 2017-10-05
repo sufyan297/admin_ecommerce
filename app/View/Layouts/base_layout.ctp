@@ -20,12 +20,14 @@
         echo $this->Html->css('AdminLTE.min');
         echo $this->Html->css('_all-skins.min');
         echo $this->Html->css('bootstrap-datepicker3.min');
-
+        echo $this->Html->css('angular-growl.min');
+        echo $this->Html->css('loading-bar.min');
 
         echo $this->Html->script('jQuery/jquery-2.2.3.min');
         //Angular
         echo $this->Html->script('angular.min');
         echo $this->Html->script('angular-growl.min');
+        echo $this->Html->script('loading-bar.min');
 
         //-------------------------
         echo $this->Html->script('bootstrap.min');

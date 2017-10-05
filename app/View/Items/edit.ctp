@@ -29,7 +29,6 @@
 	            </div>
 	            <!-- /.box-header -->
 	              <div class="box-body">
-
                       <!-- Row -->
                       <div class="row">
                           <div class="col-md-6">
@@ -176,6 +175,10 @@
     <?php echo $this->Form->end(); ?>
 
     <!-- Primary Photo ends here -->
+    <!-- Hidden Fields -->
+        <input id="data_item_id" type="hidden" value="<?= $data['Item']['id'] ?>" />
+        <input type="hidden" ng-model="item_id"/>
+    <!-- Hidden Fields Over Here -->
 
     <div class="row">
         <div class="col-md-12">
@@ -197,7 +200,7 @@
 		<div class="col-md-12">
 			<div class="box box-primary">
 				<div class="box-header with-border">
-	            <h3 class="box-title">Variants {{var_idx + 1}}</h3>
+	            <h3 class="box-title">Child Item {{var_idx + 1}}</h3>
 
 		            <div class="box-tools pull-right">
 		                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -209,9 +212,13 @@
 	              <div class="box-body">
 
                       <!-- Row Start -->
+
+                      <!-- Hidden Fields -->
                       <input type="hidden" ng-model="var.id" />
+                      <!-- Ok Great -->
+
                       <div class="row">
-                          <div class="col-md-6">
+                          <div class="col-md-4">
                               <div class="form-group">
                                 <label for="inputPrice">Price</label>
                                 <?php echo $this->Form->input('price',array(
@@ -224,7 +231,7 @@
                                 ?>
                               </div>
                           </div>
-                          <div class="col-md-6">
+                          <div class="col-md-4">
                               <div class="form-group">
                                 <label for="inputDiscountPrice">Discount Price</label>
                                 <?php echo $this->Form->input('discount_price',array(
@@ -253,9 +260,12 @@
                           <div class="col-md-4">
                               <div class="form-group">
                                     <label for="inputVariantProperty">Variant Property</label>
+                                    <!-- New addition -->
                                     <select class="form-control select2" ng-model="sub_var.variant_property_id" style="width: 100%;">
                                         <option ng-repeat="option in sub_var.all_properties" value="{{option.VariantProperty.id}}">{{option.VariantProperty.name}}</option>
                                     </select>
+                                    <!-- okao skdo -->
+
                               </div>
                           </div>
 
@@ -277,7 +287,7 @@
                                   <!-- <br/> -->
                                   <label for="inputVariantName">&nbsp;</label>
                                   <button class="btn btn-success btn-block" ng-click="addSubVariant(var_idx, sub_var_idx)">
-                                      <i class="fa fa-plus"></i> Add
+                                      <i class="fa fa-plus"></i> Add Variant
                                   </button>
                               </div>
                           </div>
@@ -287,6 +297,25 @@
 	                <!-- /.box-body -->
 
 		            <div class="box-footer">
+                        <!-- <div class=" col-md-4">
+                        </div> -->
+                        <div class="col-md-offset-10 col-md-2" ng-if="var.id === null">
+                            <button class="btn btn-success btn-block" ng-click="addChildItem_DB(var)">
+                                <i class="fa fa-plus"></i> Add Child Item
+                            </button>
+                        </div>
+
+                        <div class="col-md-offset-8 col-md-2" ng-if="var.id !== null">
+                            <button class="btn btn-warning btn-block" ng-click="addChildItem_DB(var)">
+                                <i class="fa fa-pencil"></i> Edit Child Item
+                            </button>
+                        </div>
+
+                        <div class="col-md-2" ng-if="var.id !== null">
+                            <button class="btn btn-danger btn-block" ng-click="removeChildItem_DB(var)">
+                                <i class="fa fa-times"></i> Remove Child Item
+                            </button>
+                        </div>
 		            </div>
 	        </div>
 		</div>

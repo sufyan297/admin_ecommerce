@@ -3,6 +3,9 @@ App::uses('AppModel', 'Model');
 
 class Item extends Model
 {
+
+    var $hasMany = array('ChildItems'=> array('className' => 'Item', 'foreignKey'=>'item_id'),'ItemVariant');
+
     public $actsAs = array(
                 'Upload.Upload' => array(
                         // Field in the table which will store the path of the image

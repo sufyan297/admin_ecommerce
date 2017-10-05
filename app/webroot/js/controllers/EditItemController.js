@@ -2,7 +2,7 @@
 
     var app = angular.module("krerum");
 
-    app.controller("EditItemController", ['$scope', '$http', function($scope, $http) {
+    app.controller("EditItemController", ['$scope', '$http','growl', function($scope, $http, growl) {
         console.log("EditItemController");
 
 
@@ -10,7 +10,7 @@
         //First Variant
         $scope.variants = [
             {
-                id: null,
+                id: null, //ChildItemID
                 sub_variants: [
                     {
                         variant_id: '',
@@ -24,6 +24,7 @@
         ];
 
         $scope.all_variants = [];
+        $scope.item_id = document.getElementById('data_item_id').value;
         //---------------------------------------------------------------------------
 
 
@@ -32,7 +33,7 @@
             //New Variant
             $scope.variants.push(
                 {
-                    id: null,
+                    id: null, //ChildItemID
                     sub_variants: [
                         {
                             variant_id: '',
@@ -44,6 +45,8 @@
                     discount_price: ''
                 }
             );
+
+
             //---------------------
             addSelect2();
         };
@@ -70,6 +73,66 @@
             $scope.variants[var_idx].sub_variants.splice(sub_var_idx, 1);
         };
 
+
+        //--------------------------------
+        //  Setters
+        //---------------
+        $scope.addChildItem_DB = function addChildItem_DB(_variant)
+        {
+            // console.log("[POST] ChildItem: ", _variant);
+            var req = {
+                method: 'POST',
+                url: baseUrl + 'items/addChildItem',
+                data: {
+                    variant: _variant,
+                    item_id: $scope.item_id
+                }
+            };
+
+            console.log("[POST] Request: ", req);
+
+            $http(req)
+    		.then(function successCallback(resp) {
+                //Success
+                if (resp.data.status == 'success') {
+                    console.log("RESPONSE:",resp);
+                    growl.success('Child Item successfully added.');
+                    window.location.reload();
+                } else {
+                    growl.error(resp.data.message);
+                }
+            }, function errorCallback(response) {
+    		    console.log(response);
+    		});
+        };
+
+        $scope.removeChildItem_DB = function removeChildItem_DB(_variant)
+        {
+            console.log("Variant: ", _variant);
+            if (confirm("Are you sure you want to delete this child item? \n This action won't be rollback.")) {
+                var req = {
+                    method: 'POST',
+                    url: baseUrl + 'items/removeChildItem',
+                    data: {
+                        child_item_id: _variant.id, //ChildItemId (Actual Child we wants to delete)
+                        item_id: $scope.item_id//ParentItemId (Not needed just sending optional)
+                    }
+                };
+
+                $http(req)
+                .then(function successCallback(resp) {
+                    //Success
+                    if (resp.data.status === 'success') {
+                        growl.error("Child Item successfully removed.");
+                        window.location.reload();
+                    } else {
+                        growl.error(resp.data.message);
+                    }
+                }, function errorCallback(response) {
+                    console.log(response);
+                });
+            }
+        };
 
         //---------------------
         //Getters
@@ -101,9 +164,40 @@
     		});
         };
 
+        function variantIsAlreadySelected(var_idx, sub_var_idx, _variant_id)
+        {
+            try {
+                console.log("Variant IDX:",var_idx);
+                console.log("Sub Variant IDX:",sub_var_idx);
+                var idx = 1;
+                $scope.variants[var_idx].sub_variants.forEach(function(row) {
+                    if (row.variant_id === _variant_id) {
+                        console.log("Row:- ",row);
+                        if (idx === 2) {
+                            throw {code: 'BREAK_IT'};
+                        }
+                        idx++;
+                    }
+                });
+            } catch(err) {
+                if (err && err.code === 'BREAK_IT') {
+                    return flg;
+                }
+            }
+            return flg;
+        }
+
         $scope.getVariantProperties = function getVariantProperties(var_idx, sub_var_idx, _variant_id)
         {
-            console.log("SELECTED VARIANT:", _variant_id);
+            console.log("[getVariantProperties]:", _variant_id);
+
+            //First check: This Variant is already selected before or not. if Yes restrict it.
+            var chk = variantIsAlreadySelected(var_idx, sub_var_idx, _variant_id);
+
+            if (chk === true) {
+                return growl.error("Oops! That variant is already selected for this child item.");
+            }
+
             var req = {
                 method: 'POST',
                 url: baseUrl + 'items/getAllProperties',
@@ -130,10 +224,38 @@
             }, function errorCallback(response) {
                 console.log(response);
             });
-
-
         };
 
+
+        //------------------------------
+        //get Variant
+        function getChildItems()
+        {
+            console.log("getChildItems()");
+            var req = {
+                method: 'POST',
+                url: baseUrl + 'items/getAllChildItems',
+                data: {
+                    item_id: $scope.item_id
+                }
+            };
+
+            $http(req)
+            .then(function successCallback(resp) {
+                //Success
+                if(resp.data.status == 'success')
+                {
+                    console.log("[getChildItems] SUCCESS",resp.data);
+                    $scope.variants = resp.data.data;
+                }
+                else {
+                    console.log("Failed!!");
+                    // console.log(response);
+                }
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+        }
 
         //Extras
         //-=-=--=-=-=-=-=
@@ -145,8 +267,8 @@
         }
 
         //CallBacks
-
         $scope.getVariants();
+        getChildItems();
     }]);
 
 })();

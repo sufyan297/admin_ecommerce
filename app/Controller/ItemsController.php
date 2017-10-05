@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class ItemsController extends AppController
 {
     public $components = array('Paginator');
-    public $uses = array('ItemCategory','Item','Variant','VariantProperty');
+    public $uses = array('ItemCategory','Item','Variant','VariantProperty','ItemVariant');
 
     public function beforeFilter()
     {
@@ -99,9 +99,140 @@ class ItemsController extends AppController
         pr($tmp);
     }
 
+    //----------------------------------
+    private function _addItemChild($item_id = null, $id = null, $price = null, $discount_price = null)
+    {
+        if ($item_id != null && $price != null && $discount_price != null) {
+
+            //getParentItem
+            $parent_item = $this->Item->findById($item_id);
+
+            unset($parent_item['Item']['id']);
+            $parent_item['Item']['image_file'] = null;
+            $parent_item['Item']['image_dir'] = null;
+
+            $child_item = $parent_item; //clone it
+
+            //update or add details
+            $child_item['Item']['item_id'] = $item_id;
+            $child_item['Item']['price'] = $price;
+            $child_item['Item']['discount_price'] = $discount_price;
+
+            if ($id == null) {
+                $this->Item->create(); //create new child
+            } else {
+                $this->Item->id = $id; //update current one
+            }
+
+            if ($resp = $this->Item->save($child_item)) {
+                if ($id != null) {
+                    $resp['Item']['id'] = $id;
+                }
+                $this->log("RESPONSE: ");
+                $this->log($resp);
+                return $resp;
+            }
+
+        }
+        return false;
+    }
+
+    //--------------------------
+    private function _removeExistingVariants($child_item_id = null)
+    {
+        if ($child_item_id != null) {
+            $this->ItemVariant->deleteAll(
+                [
+                    'ItemVariant.item_id' => $child_item_id
+                ]
+            );
+
+            return true;
+        }
+        return false;
+    }
+
+    private function _addItemVariant($child_item_id = null, $variant_id = null, $variant_property_id = null)
+    {
+        if ($child_item_id != null && $variant_id != null && $variant_property_id != null) {
+            $tmp = [];
+
+            $tmp['ItemVariant']['item_id'] = $child_item_id;
+            $tmp['ItemVariant']['variant_id'] = $variant_id;
+            $tmp['ItemVariant']['variant_property_id'] = $variant_property_id;
+            $this->ItemVariant->create();
+            if ($resp = $this->ItemVariant->save($tmp)) {
+                return $resp;
+            }
+        }
+        return false;
+    }
 
     //------------------------------------------------
     //  API
+    //--------------------------------------------
+    public function addChildItem()
+    {
+        if ($this->request->is('post')) {
+            $data = $this->request->input('json_decode',true);
+
+            //Save Item Price
+            $child_item = $this->_addItemChild($data['item_id'],$data['variant']['id'], $data['variant']['price'], $data['variant']['discount_price']);
+            if ($child_item != false) {
+                //remove existing variants
+                $this->_removeExistingVariants($child_item['Item']['id']);
+
+                //Save Item Variants
+                $this->log($data);
+                foreach ($data['variant']['sub_variants'] as $key => $value) {
+                    $this->_addItemVariant($child_item['Item']['id'], $value['variant_id'], $value['variant_property_id']);
+                }
+
+                //Successfully added.
+                $res = new ResponseObject ( ) ;
+                $res -> status = 'success' ;
+                $res -> data = $child_item ;
+                $res -> message = 'Child Item added.' ;
+                $this -> response -> body ( json_encode ( $res ) ) ;
+                return $this -> response ;
+            } else {
+                //SEND OOPS SOMETHING WENT WRONG.
+                $res = new ResponseObject ( ) ;
+                $res -> status = 'error' ;
+                $res -> message = 'Oops! Something went wrong.' ;
+                $this -> response -> body ( json_encode ( $res ) ) ;
+                return $this -> response ;
+            }
+        }
+    }
+
+    public function removeChildItem()
+    {
+        if ($this->request->is('post')) {
+            $data = $this->request->input('json_decode',true);
+
+            $tmp = [];
+            $tmp['Item']['del_flag'] = 1;
+            $this->Item->id = $data['child_item_id'];
+            if ($this->Item->save($tmp)) {
+                $res = new ResponseObject ( ) ;
+                $res -> status = 'success' ;
+                $res -> message = 'Child Item removed.' ;
+                $this -> response -> body ( json_encode ( $res ) ) ;
+                return $this -> response ;
+            } else {
+                $res = new ResponseObject ( ) ;
+                $res -> status = 'error' ;
+                $res -> message = 'Oops! Something went wrong.' ;
+                $this -> response -> body ( json_encode ( $res ) ) ;
+                return $this -> response ;
+            }
+        }
+    }
+
+
+
+    //---------------------------------
     public function getAllVariants()
     {
         if ($this->request->is('post')) {
@@ -165,6 +296,106 @@ class ItemsController extends AppController
             $res = new ResponseObject ( ) ;
             $res -> status = 'error' ;
             $res -> message = 'INVALID_METHOD.' ;
+            $this -> response -> body ( json_encode ( $res ) ) ;
+            return $this -> response ;
+        }
+    }
+
+    //---------------------
+    public function getAllChildItems()
+    {
+        if ($this->request->is('post')) {
+            $data = $this->request->input('json_decode',true);
+
+            $this->Item->Behaviors->load('Containable');
+
+            $item = $this->Item->find(
+                'first',
+                [
+                    'fields' => [
+                        'Item.id',
+                        // 'Item.item_category_id'
+                    ],
+                    'conditions' => [
+                        'Item.id' => $data['item_id']
+                    ],
+                    'contain' => [
+                        'ChildItems' => [
+                            'fields' => [
+                                'ChildItems.id',
+                                'ChildItems.price',
+                                'ChildItems.discount_price',
+                            ],
+                            'conditions' => [
+                                'ChildItems.del_flag !=' => 1
+                            ]
+                        ],
+                        'ChildItems.ItemVariant',
+                        // 'ChildItems.ItemVariant.Variant' => [
+                        //     'fields' => [
+                        //         'Variant.id',
+                        //         'Variant.name'
+                        //     ]
+                        // ],
+                        // 'ChildItems.ItemVariant.VariantProperty' => [
+                        //     'fields' => [
+                        //         'VariantProperty.id',
+                        //         'VariantProperty.name'
+                        //     ]
+                        // ],
+                        'ChildItems.ItemVariant.Variant.VariantProperty' => [
+                            'fields' => [
+                                'VariantProperty.id',
+                                'VariantProperty.name'
+                            ]
+                        ]
+                    ]
+                ]
+            );
+
+            //vars
+            $child_items = [];
+
+            // $this->log("ITEM");
+            // $this->log($item);
+
+            // //getChildItems
+            foreach ($item['ChildItems'] as $key => $value) {
+                $tmp = [];
+                $tmp['id'] = $value['id'];
+                $tmp['price'] = $value['price'];
+                $tmp['discount_price'] = $value['discount_price'];
+
+                $tmp['sub_variants'] = [];
+                foreach ($value['ItemVariant'] as $key => $val2) {
+                    $tmp2 = [];
+                    $tmp2['variant_id'] = $val2['variant_id'];
+                    $tmp2['variant_property_id'] = $val2['variant_property_id'];
+                    $tmp2['all_properties'] = [];
+                    foreach ($val2['Variant']['VariantProperty'] as $key => $val3) {
+                        $tmp3 = [];
+                        $tmp3['VariantProperty']['id'] = $val3['id'];
+                        $tmp3['VariantProperty']['name'] = $val3['name'];
+
+                        array_push($tmp2['all_properties'], $tmp3);
+                    }
+
+                    // $this->log("SUB_CHILD_ITEM");
+                    // $this->log($tmp2);
+
+                    array_push($tmp['sub_variants'], $tmp2);
+                }
+                // $this->log("CHILD_ITEM");
+                // $this->log($tmp);
+                array_push($child_items, $tmp);
+            }
+            //
+            // $item_vars =
+            // $this->log($child_items);
+            $res = new ResponseObject ( ) ;
+            $res -> status = 'success' ;
+            $res -> data = $child_items ;
+            $res -> message = 'Child items are fetched.' ;
             $this -> response -> body ( json_encode ( $res ) ) ;
             return $this -> response ;
         }
