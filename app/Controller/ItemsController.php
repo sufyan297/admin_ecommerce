@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class ItemsController extends AppController
 {
     public $components = array('Paginator');
-    public $uses = array('ItemCategory','Item','Variant','VariantProperty','ItemVariant');
+    public $uses = array('ItemCategory','Item','Variant','VariantProperty','ItemVariant','SellerItem');
 
     public function beforeFilter()
     {
@@ -232,6 +232,19 @@ class ItemsController extends AppController
         }
         return false;
     }
+    //----------------------
+    private function _removeExistingSellerItems($child_item_id = null)
+    {
+        if ($child_item_id != null) {
+            $this->SellerItem->deleteAll(
+                [
+                    'SellerItem.item_id' => $child_item_id
+                ]
+            );
+            return true;
+        }
+        return false;
+    }
 
     private function _addItemVariant($child_item_id = null, $variant_id = null, $variant_property_id = null)
     {
@@ -249,9 +262,29 @@ class ItemsController extends AppController
         return false;
     }
 
+    private function _addSellerItem($child_item_id = null, $seller_id = null)
+    {
+        if ($child_item_id != null && $seller_id != null) {
+            $tmp = [];
+
+            $tmp['SellerItem']['item_id'] = $child_item_id;
+            $tmp['SellerItem']['seller_id'] = $seller_id;
+            $this->SellerItem->create();
+            if ($resp = $this->SellerItem->save($tmp)) {
+                return $resp;
+            }
+        }
+        return false;
+    }
+
     //------------------------------------------------
     //  API
     //--------------------------------------------
+    /**
+    *   Add Child Item
+    *
+    * @return void
+    */
     public function addChildItem()
     {
         if ($this->request->is('post')) {
@@ -260,6 +293,12 @@ class ItemsController extends AppController
             //Save Item Price
             $child_item = $this->_addItemChild($data['item_id'],$data['variant']['id'], $data['variant']['price'], $data['variant']['discount_price']);
             if ($child_item != false) {
+                //AddThisItemForLoggedInSeller
+                //For Now let's add for just single seller
+                $this->_removeExistingSellerItems()
+                //
+                $this->_addSellerItem($child_item['Item']['id'],'self'); //
+                //-------------------
                 //remove existing variants
                 $this->_removeExistingVariants($child_item['Item']['id']);
 

@@ -5,7 +5,7 @@ App::uses('AppController', 'Controller');
 class AdminsController extends AppController
 {
     public $components = array('Paginator');
-    // public $uses = array('Admin');
+    public $uses = array('Admin','Item','ItemCategory','Variant');
 
     public function beforeFilter()
     {
@@ -50,9 +50,36 @@ class AdminsController extends AppController
         $admins_count = $this->Admin->find('count');
         $this->set('admins_count' , $admins_count);
         //
-        // //Events Count
-        // $events_count = $this->Event->find('count');
-        // $this->set('events_count' , $events_count);
+        // //ItemCategory Count
+        $item_category_count = $this->ItemCategory->find('count',
+            [
+                'conditions' => [
+                    'ItemCategory.del_flag !=' => 1
+                ]
+            ]
+        );
+        $this->set('categories_count' , $item_category_count);
+
+        // //Items Count
+        $items_count = $this->Item->find('count',
+            [
+                'conditions' => [
+                    'Item.item_id' => null,
+                    'Item.del_flag !=' => 1
+                ]
+            ]
+        );
+        $this->set('items_count' , $items_count);
+
+        // //Variants Count
+        $variants_count = $this->Variant->find('count',
+            [
+                'conditions' => [
+                    'Variant.del_flag !=' => 1
+                ]
+            ]
+        );
+        $this->set('variants_count' , $variants_count);
     }
     public function add()
     {

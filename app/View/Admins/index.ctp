@@ -7,11 +7,11 @@
 
 
     <div class="row">
-      <div class="col-lg-3 col-xs-6">
+      <div class="col-lg-2 col-xs-6">
           <div class="small-box bg-green">
               <div class="inner">
                   <h3>
-                    <?php echo $admins_count; ?>
+                    <?= $admins_count ?>
                   </h3>
                   <p>
                     Total Admins
@@ -26,26 +26,63 @@
           </div>
       </div>
 
-      <div class="col-lg-3 col-xs-6">
+      <div class="col-lg-2 col-xs-6">
           <div class="small-box bg-yellow">
               <div class="inner">
                   <h3>
-                      123
-                    <?php //echo $events_count; ?>
+                    <?= $categories_count ?>
                   </h3>
                   <p>
-                    Total
+                    Total Item Categories
                   </p>
               </div>
               <div class="icon">
-                  <i class="fa fa-file-text-o"></i>
+                  <i class="fa fa-tag"></i>
               </div>
-              <a href="<?= $this->webroot. 'events/view'; ?>" class="small-box-footer">
+              <a href="<?= $this->webroot. 'item_category/view'; ?>" class="small-box-footer">
                 More info <i class="fa fa-arrow-circle-right"></i>
               </a>
           </div>
       </div>
 
-		</div>
-	</section>
+      <div class="col-lg-2 col-xs-6">
+          <div class="small-box bg-purple">
+              <div class="inner">
+                  <h3>
+                    <?= $items_count ?>
+                  </h3>
+                  <p>
+                    Total Items
+                  </p>
+              </div>
+              <div class="icon">
+                  <i class="fa fa-list-ul"></i>
+              </div>
+              <a href="<?= $this->webroot. 'items/view'; ?>" class="small-box-footer">
+                More info <i class="fa fa-arrow-circle-right"></i>
+              </a>
+          </div>
+      </div>
+
+      <div class="col-lg-2 col-xs-6">
+          <div class="small-box bg-orange">
+              <div class="inner">
+                  <h3>
+                    <?= $variants_count ?>
+                  </h3>
+                  <p>
+                    Total Variants
+                  </p>
+              </div>
+              <div class="icon">
+                  <i class="fa fa-sitemap"></i>
+              </div>
+              <a href="<?= $this->webroot. 'variants/view'; ?>" class="small-box-footer">
+                More info <i class="fa fa-arrow-circle-right"></i>
+              </a>
+          </div>
+      </div>
+
+	</div>
+</section>
 <?php $this->end('main-content'); ?>

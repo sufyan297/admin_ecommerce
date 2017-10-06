@@ -13,6 +13,7 @@
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css"> -->
     <!-- Ionicons -->
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css"> -->
+
     <?php
         echo $this->Html->css('font-awesome.min');
         echo $this->Html->css('ionicons.min');
@@ -22,6 +23,7 @@
         echo $this->Html->css('bootstrap-datepicker3.min');
         echo $this->Html->css('angular-growl.min');
         echo $this->Html->css('loading-bar.min');
+        echo $this->Html->css('style');
 
         echo $this->Html->script('jQuery/jquery-2.2.3.min');
         //Angular
@@ -320,6 +322,20 @@
                             <li><a href="<?php echo $this->Html->url(array('controller' => 'item_category', 'action' => 'view')); ?>"><i class="fa fa-circle-o"></i> View Categories</a></li>
                         </ul>
                     </li>
+                </ul>
+            </li>
+
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-university"></i> <span>Sellers</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="<?php echo $this->Html->url(array('controller' => 'sellers', 'action' => 'add')); ?>"><i class="fa fa-circle-o"></i> Add Seller</a></li>
+                    <li><a href="<?php echo $this->Html->url(array('controller' => 'sellers', 'action' => 'view')); ?>"><i class="fa fa-circle-o"></i> View Sellers</a></li>
                 </ul>
             </li>
             <!-- <li><a href="../../documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li> -->
