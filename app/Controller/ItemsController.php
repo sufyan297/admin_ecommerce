@@ -295,7 +295,7 @@ class ItemsController extends AppController
             if ($child_item != false) {
                 //AddThisItemForLoggedInSeller
                 //For Now let's add for just single seller
-                $this->_removeExistingSellerItems()
+                $this->_removeExistingSellerItems($child_item['Item']['id']);
                 //
                 $this->_addSellerItem($child_item['Item']['id'],'self'); //
                 //-------------------
