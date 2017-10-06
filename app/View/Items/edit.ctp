@@ -122,7 +122,11 @@
 
 	            	</div>
 	              <!-- /.box-body -->
-
+                  <div class="box-footer">
+                      <?php
+                          echo $this->Form->input('Edit Item',array('class'=>'btn btn-primary pull-right','type'=>'submit','label'=>false));
+                      ?>
+                  </div>
 	        </div>
 		</div>
 	</div>
@@ -153,9 +157,9 @@
                           </div>
                           <div class="col-md-3">
                               <div class="form-group">
-                                <label for="inputPhoto">Photo<span style='color: red;'>*</span></label>
+                                <label for="inputPhoto">Photo</label>
                                 <?php
-                                    echo $this->Form->input("image_file",array('id'=>'inputPhoto','type'=>'file','class'=>'form-control','label'=>false,'autofocus'=>true,'required'=>'required'));
+                                    echo $this->Form->input("image_file",array('id'=>'inputPhoto','type'=>'file','class'=>'form-control','label'=>false,'autofocus'=>true));
                                 ?>
                               </div>
                           </div>
@@ -166,7 +170,7 @@
 
 		            <div class="box-footer">
 						<?php
-							echo $this->Form->input('Edit Item',array('class'=>'btn btn-primary pull-right','type'=>'submit','label'=>false));
+							echo $this->Form->input('Change Picture',array('class'=>'btn btn-primary pull-right','type'=>'submit','label'=>false));
 						?>
 		            </div>
 	        </div>
@@ -196,8 +200,8 @@
     </div>
     <!-- Item Variants -->
 
-    <div class="row" ng-repeat="var in variants track by $index" ng-init="var_idx = $index">
-		<div class="col-md-12">
+    <div class="row">
+		<div class="col-md-6" ng-repeat="var in variants track by $index" ng-init="var_idx = $index">
 			<div class="box box-primary">
 				<div class="box-header with-border">
 	            <h3 class="box-title">Child Item {{var_idx + 1}}</h3>
@@ -220,7 +224,7 @@
                       <div class="row">
                           <div class="col-md-4">
                               <div class="form-group">
-                                <label for="inputPrice">Price</label>
+                                <label for="inputPrice">Price<span style='color: red;'>*</span></label>
                                 <?php echo $this->Form->input('price',array(
                                   'id' => 'inputPrice',
                                   'class'=>"form-control",
@@ -233,7 +237,7 @@
                           </div>
                           <div class="col-md-4">
                               <div class="form-group">
-                                <label for="inputDiscountPrice">Discount Price</label>
+                                <label for="inputDiscountPrice">Discount Price<span style='color: red;'>*</span></label>
                                 <?php echo $this->Form->input('discount_price',array(
                                   'id' => 'inputDiscountPrice',
                                   'class'=>"form-control",
@@ -251,15 +255,15 @@
                       <div class="row" ng-repeat="sub_var in var.sub_variants track by $index" ng-init="sub_var_idx = $index">
                           <div class="col-md-4">
                               <div class="form-group">
-                                    <label for="inputVariantName">Variant Name</label>
-                                    <select class="form-control select2" ng-model="sub_var.variant_id" style="width: 100%;" ng-change="getVariantProperties(var_idx, sub_var_idx, sub_var.variant_id)">
+                                    <label for="inputVariantName">Variant Name<span style='color: red;'>*</span></label>
+                                    <select class="form-control select2" ng-model="sub_var.variant_id" style="width: 100%;" ng-init="old_variant_id = sub_var.variant_id" ng-change="getVariantProperties(var_idx, sub_var_idx, sub_var.variant_id, old_variant_id)">
                                         <option ng-repeat="option in all_variants" value="{{option.Variant.id}}">{{option.Variant.name}}</option>
                                     </select>
                               </div>
                           </div>
                           <div class="col-md-4">
                               <div class="form-group">
-                                    <label for="inputVariantProperty">Variant Property</label>
+                                    <label for="inputVariantProperty">Variant Property<span style='color: red;'>*</span></label>
                                     <!-- New addition -->
                                     <select class="form-control select2" ng-model="sub_var.variant_property_id" style="width: 100%;">
                                         <option ng-repeat="option in sub_var.all_properties" value="{{option.VariantProperty.id}}">{{option.VariantProperty.name}}</option>
@@ -269,7 +273,7 @@
                               </div>
                           </div>
 
-                          <div class="col-md-1">
+                          <div class="col-md-2">
                               <div class="form-group">
                                   <!-- <br/> -->
                                   <label for="inputVariantName">&nbsp;</label>
@@ -299,19 +303,19 @@
 		            <div class="box-footer">
                         <!-- <div class=" col-md-4">
                         </div> -->
-                        <div class="col-md-offset-10 col-md-2" ng-if="var.id === null">
+                        <div class="col-md-offset-8 col-md-4" ng-if="var.id === null">
                             <button class="btn btn-success btn-block" ng-click="addChildItem_DB(var)">
                                 <i class="fa fa-plus"></i> Add Child Item
                             </button>
                         </div>
 
-                        <div class="col-md-offset-8 col-md-2" ng-if="var.id !== null">
+                        <div class="col-md-offset-4 col-md-4" ng-if="var.id !== null">
                             <button class="btn btn-warning btn-block" ng-click="addChildItem_DB(var)">
                                 <i class="fa fa-pencil"></i> Edit Child Item
                             </button>
                         </div>
 
-                        <div class="col-md-2" ng-if="var.id !== null">
+                        <div class="col-md-4" ng-if="var.id !== null">
                             <button class="btn btn-danger btn-block" ng-click="removeChildItem_DB(var)">
                                 <i class="fa fa-times"></i> Remove Child Item
                             </button>

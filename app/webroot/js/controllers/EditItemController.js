@@ -166,35 +166,39 @@
 
         function variantIsAlreadySelected(var_idx, sub_var_idx, _variant_id)
         {
-            try {
-                console.log("Variant IDX:",var_idx);
-                console.log("Sub Variant IDX:",sub_var_idx);
-                var idx = 1;
-                $scope.variants[var_idx].sub_variants.forEach(function(row) {
-                    if (row.variant_id === _variant_id) {
-                        console.log("Row:- ",row);
-                        if (idx === 2) {
-                            throw {code: 'BREAK_IT'};
-                        }
-                        idx++;
-                    }
-                });
-            } catch(err) {
-                if (err && err.code === 'BREAK_IT') {
-                    return flg;
+            var flg = false;
+
+            // console.log("Variant IDX:",var_idx);
+            // console.log("Sub Variant IDX:",sub_var_idx);
+            var idx = 0;
+
+            // console.log("VARIANTS: ", $scope.variants[var_idx].sub_variants);
+            $scope.variants[var_idx].sub_variants.forEach(function(row) {
+                if (row.variant_id === _variant_id) {
+                    console.log("Row:- ",row);
+                    idx++;
                 }
+            });
+
+            if (idx === 2) {
+                flg = true;
+                // console.log("BREAK_IT");
             }
+
             return flg;
         }
 
-        $scope.getVariantProperties = function getVariantProperties(var_idx, sub_var_idx, _variant_id)
+        $scope.getVariantProperties = function getVariantProperties(var_idx, sub_var_idx, _variant_id, old_variant_id)
         {
-            console.log("[getVariantProperties]:", _variant_id);
+            // console.log("[getVariantProperties]:", _variant_id);
 
             //First check: This Variant is already selected before or not. if Yes restrict it.
             var chk = variantIsAlreadySelected(var_idx, sub_var_idx, _variant_id);
 
             if (chk === true) {
+                // console.log("New Variant:", _variant_id);
+                // console.log("Old Variant: ", old_variant_id);
+                $scope.variants[var_idx].sub_variants[sub_var_idx].variant_id = old_variant_id;
                 return growl.error("Oops! That variant is already selected for this child item.");
             }
 

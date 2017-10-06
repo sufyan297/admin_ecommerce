@@ -93,12 +93,93 @@ class ItemsController extends AppController
         //Setters
         $this->set('item_categories', $item_categories);
         //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--==-=-
+        if ($this->request->is('post')) {
+            $data = $this->request->data;
+            $this->Item->id = $id;
 
+            if ($this->Item->save($data)) {
+                //Successfully modified.
+                $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
+                                          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <b>Item successfully modified.</b>
+                                          </div>');
+                return $this -> redirect(array('controller' => 'items', 'action' => 'view'));
+            } else {
+                //Failed to add
+                $this->Session->setFlash('<div class="alert alert-danger alert-dismissable">
+                                          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            <b>Oops! Something went wrong. Please try again later.</b>
+                                          </div>');
+                return $this -> redirect(array('controller' => 'items', 'action' => 'edit', $id));
+            }
+        }
 
         $this->set('data', $tmp);
-        pr($tmp);
     }
 
+    /**
+    *   View Page for Items
+    *
+    */
+    public function view()
+    {
+        $this->layout = 'base_layout';
+        $this -> set('page_title', 'View Items');
+
+        $this->Item->Behaviors->load('Containable');
+
+        $q = "";
+        if (isset($this->request->query['search'])) {
+            $q = $this->request->query['search'];
+        }
+
+        $this->Paginator->settings = array(
+            'limit' => 10,
+            'order' => 'Item.created DESC',
+            'conditions' => [
+                'Item.item_id' => null,
+                'Item.del_flag !=' => 1,
+                'OR' => [
+                    'Item.name LIKE' => '%'.$q.'%',
+                    'ItemCategory.name LIKE' => '%'.$q.'%'
+                ]
+            ],
+            'contain' => [
+                'ItemCategory'
+            ]
+        );
+        $data = $this->Paginator->paginate('Item');
+        $this->set('items', $data);
+        $this->set('search_query', $q);
+
+    }
+
+    /**
+    *   Delete Item (Soft delete)
+    *
+    * @return redirect
+    */
+    public function delete($id = null)
+    {
+        if ($id != null) {
+            $this->Item->id = $id;
+            $tmp = [];
+            $tmp['Item']['del_flag'] = 1;
+            if ($this->Item->save($tmp)) {
+                $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            Item successfully deleted.
+                                          </div>');
+            } else {
+                $this->Session->setFlash('<div class="alert alert-danger alert-dismissable">
+                                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                            Failed to delete item. Please try again later.
+                                          </div>');
+            }
+
+            return $this->redirect($this->Auth->redirectUrl(array('controller'=>'items','action'=>'view')));
+        }
+    }
     //----------------------------------
     private function _addItemChild($item_id = null, $id = null, $price = null, $discount_price = null)
     {

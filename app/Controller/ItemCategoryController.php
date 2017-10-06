@@ -130,7 +130,7 @@ class ItemCategoryController extends AppController
             } else {
                 $this->Session->setFlash('<div class="alert alert-danger alert-dismissable">
                                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                            Failed to delete variant. Please try again later.
+                                            Failed to delete Item Category. Please try again later.
                                           </div>');
             }
 
