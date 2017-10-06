@@ -262,13 +262,15 @@ class ItemsController extends AppController
         return false;
     }
 
-    private function _addSellerItem($child_item_id = null, $seller_id = null)
+    private function _addSellerItem($child_item_id = null, $seller_id = null, $price = 0.00, $discount_price = 0.00)
     {
         if ($child_item_id != null && $seller_id != null) {
             $tmp = [];
 
             $tmp['SellerItem']['item_id'] = $child_item_id;
             $tmp['SellerItem']['seller_id'] = $seller_id;
+            $tmp['SellerItem']['price'] = $price;
+            $tmp['SellerItem']['discount_price'] = $discount_price;
             $this->SellerItem->create();
             if ($resp = $this->SellerItem->save($tmp)) {
                 return $resp;
@@ -297,7 +299,7 @@ class ItemsController extends AppController
                 //For Now let's add for just single seller
                 $this->_removeExistingSellerItems($child_item['Item']['id']);
                 //
-                $this->_addSellerItem($child_item['Item']['id'],'self'); //
+                $this->_addSellerItem($child_item['Item']['id'], 'self', $data['variant']['price'], $data['variant']['discount_price']); //
                 //-------------------
                 //remove existing variants
                 $this->_removeExistingVariants($child_item['Item']['id']);
