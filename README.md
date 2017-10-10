@@ -1,5 +1,10 @@
 # Admin Panel for E-Commerce #
 
+# Tag: v.0.0.3 (Date: 10th October 2017)
+- Dashboard updated.
+- Items CRUD Updated.
+- Sub Category CRUD added.
+
 # Tag: v0.0.2 (Date: 6th October 2017)
 - Items CRUD added.
 - Few other fixes made on previous changes.
