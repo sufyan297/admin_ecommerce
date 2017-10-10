@@ -4,7 +4,7 @@
       <h1>Add Item<small>Items</small></h1>
 </section>
 
-<section class="content">
+<section class="content" ng-controller="AddItemController">
 	<?php
 		echo $this->Session->flash();
 	?>
@@ -68,7 +68,16 @@
                           <div class="col-md-6">
                               <div class="form-group">
                                 <label for="item_category">Item Category<span style='color: red;'>*</span></label>
-                                <?= $this -> Form -> input('item_category_id', array('options' => $item_categories, 'class' => 'form-control m-b parsley-validated', 'data-required' => 'true','id'=>'item_category', 'label' => false, 'div' => false)); ?>
+                                <select id="item_category" ng-model="obj.category_id" class="form-control select2" ng-change="getSubCategories()" required>
+                                    <option ng-repeat="cat in obj.categories" value="{{cat.ItemCategory.id}}">{{cat.ItemCategory.name}}</option>
+                                </select>
+                                <?php echo $this->Form->input('item_category_id',array(
+                                  'id' => 'inputCategoryId',
+                                  'class'=>"form-control",
+                                  'type' => 'hidden',
+                                  'label'=>false
+                                ));
+                                ?>
                               </div>
                           </div>
                           <div class="col-md-6">
@@ -90,13 +99,15 @@
                       <div class="row">
                           <div class="col-md-6">
                               <div class="form-group">
-                                <label for="inputShortDescription">Short Description<span style='color: red;'>*</span></label>
-                                <?php echo $this->Form->textarea('short_desc',array(
-                                  'id' => 'inputShortDescription',
+                                <label for="inputSubCategory">Sub Category</label>
+                                <select id="inputSubCategory" ng-model="obj.sub_category_id" class="form-control select2" ng-change="changeSubCategory()" required>
+                                    <option ng-repeat="cat in obj.sub_categories" value="{{cat.ItemSubCategory.id}}">{{cat.ItemSubCategory.name}}</option>
+                                </select>
+                                <?php echo $this->Form->input('item_sub_category_id',array(
+                                  'id' => 'inputSubCategoryId',
                                   'class'=>"form-control",
-                                  'placeholder'=>'Short description',
+                                  'type' => 'hidden',
                                   'label'=>false,
-                                  'required' => 'required',
                                 ));
                                 ?>
                               </div>
@@ -116,6 +127,24 @@
                       </div>
                       <!-- Ends Here -->
 
+
+                      <!-- Row -->
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="inputShortDescription">Short Description<span style='color: red;'>*</span></label>
+                                <?php echo $this->Form->textarea('short_desc',array(
+                                  'id' => 'inputShortDescription',
+                                  'class'=>"form-control",
+                                  'placeholder'=>'Short description',
+                                  'label'=>false,
+                                  'required' => 'required',
+                                ));
+                                ?>
+                              </div>
+                          </div>
+                      </div>
+                      <!-- Ends Here -->
 	            	</div>
 	              <!-- /.box-body -->
 

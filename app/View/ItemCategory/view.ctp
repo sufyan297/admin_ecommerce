@@ -36,6 +36,8 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Description</th>
+                                <th>Add Subcategory</th>
+                                <th>View Subcategories</th>
                                 <th>Edit</th>
                                 <th>Delete</th>
       			              </tr>
@@ -55,7 +57,16 @@
                                 <td>
                                     <?php echo $data['ItemCategory']['description']; ?>
                                 </td>
-
+                                <td>
+                                    <?php
+                                    echo $this->Html->link($this->Html->tag('i', '',array('class' => 'fa fa-plus')),array('controller'=>'item_sub_category','action'=>'add/'.$data['ItemCategory']['id']),array('class'=>'btn btn-info btn-circle', 'escape' => false));
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+                                    echo $this->Html->link($this->Html->tag('i', '',array('class' => 'fa fa-eye')),array('controller'=>'item_sub_category','action'=>'view/'.$data['ItemCategory']['id']),array('class'=>'btn btn-info btn-circle', 'escape' => false));
+                                    ?>
+                                </td>
                                 <td>
                                     <?php
                                     echo $this->Html->link($this->Html->tag('i', '',array('class' => 'fa fa-pencil')),array('controller'=>'item_category','action'=>'edit/'.$data['ItemCategory']['id']),array('class'=>'btn btn-warning btn-circle', 'escape' => false));

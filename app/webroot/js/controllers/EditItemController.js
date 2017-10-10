@@ -5,6 +5,91 @@
     app.controller("EditItemController", ['$scope', '$http','growl', function($scope, $http, growl) {
         console.log("EditItemController");
 
+        $scope.obj = {
+            categories: [],
+            category_id: '',
+            sub_categories: [],
+            sub_category_id: null
+        };
+        var fetch_flag_cat = 0, fetch_flag_sub_cat = 0;
+
+        function getItemCategories()
+        {
+            var req = {
+                method: 'POST',
+                url: baseUrl + 'item_category/getCategories',
+                data: {}
+            };
+
+            $http(req)
+            .then(function successCallback(resp) {
+                //Success
+                if (resp.data.status == 'success') {
+                    console.log("RESPONSE:",resp);
+                    growl.info('Item categories fetched.');
+
+                    $scope.obj.categories = resp.data.data;
+
+                    if (fetch_flag_cat === 0) {
+                        $scope.obj.category_id = document.getElementById('inputCategoryId').value ;
+                        $scope.getSubCategories();
+                        fetch_flag_cat = 1;
+                    }
+                    addSelect2();
+                } else {
+                    growl.error(resp.data.message);
+                }
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+
+        }
+
+        $scope.getSubCategories = function getSubCategories()
+        {
+            var req = {
+                method: 'POST',
+                url: baseUrl + 'item_sub_category/getSubCategories',
+                data: {
+                    category_id: $scope.obj.category_id
+                }
+            };
+
+            $http(req)
+            .then(function successCallback(resp) {
+                //Success
+                if (resp.data.status == 'success') {
+                    console.log("RESPONSE:",resp);
+                    growl.info('Item categories fetched.');
+                    $scope.obj.sub_categories = resp.data.data;
+
+                    document.getElementById('inputCategoryId').value = $scope.obj.category_id;
+
+                    if (fetch_flag_sub_cat === 0) {
+                        $scope.obj.sub_category_id = document.getElementById('inputSubCategoryId').value ;
+                        fetch_flag_sub_cat = 1;
+                    }
+
+                    addSelect2();
+                } else {
+                    growl.error(resp.data.message);
+                }
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+
+        };
+
+
+        $scope.changeSubCategory = function changeSubCategory()
+        {
+            console.log("changeSubCategory()");
+            document.getElementById('inputSubCategoryId').value = $scope.obj.sub_category_id;
+        };
+
+        //Callbacks
+        getItemCategories();
+        //----------------------------
 
         //---------------------------------------------------------------------------
         //First Variant

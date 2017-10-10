@@ -48,10 +48,12 @@
 
         //Controllers
         echo $this->Html->script('controllers/EditItemController');
+        echo $this->Html->script('controllers/AddItemController');
 
     ?>
 <script>
     var baseUrl = "<?php echo $this->webroot; ?>";
+
 </script>
 </head>
 <body class="hold-transition skin-red-light sidebar-mini" ng-app="krerum">
@@ -364,7 +366,11 @@
         <!-- /.content -->
       </div>
       <!-- /.content-wrapper -->
-
+      <!-- <script>
+        $(document).ready(function() {
+            $('select').select2();
+        });
+      </script> -->
       <footer class="main-footer">
         <div class="pull-right hidden-xs">
           <b>Version</b> 1.0.0

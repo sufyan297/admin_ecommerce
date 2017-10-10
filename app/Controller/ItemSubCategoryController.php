@@ -1,10 +1,10 @@
 <?php
 App::uses('AppController', 'Controller');
 
-class ItemCategoryController extends AppController
+class ItemSubCategoryController extends AppController
 {
     public $components = array('Paginator');
-    public $uses = array('ItemCategory');
+    public $uses = array('ItemSubCategory','ItemCategory');
 
     public function beforeFilter()
     {
@@ -21,11 +21,11 @@ class ItemCategoryController extends AppController
 
 
     /**
-    *   ADD ItemCategory
+    *   ADD ItemSubCategory
     *
     * @return void
     */
-    public function add()
+    public function add($id = null)
     {
         $this->layout = 'base_layout';
         $this -> set('page_title', 'Add Item category');
@@ -33,27 +33,27 @@ class ItemCategoryController extends AppController
         if($this->request->is('post'))
         {
             $data = $this->request->data;
-
-            if ($this->ItemCategory->save($data)) {
+            $data['ItemSubCategory']['item_category_id'] = $id;
+            if ($this->ItemSubCategory->save($data)) {
                 //Successfully added.
                 $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
                                           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                            <b>ItemCategory successfully added.</b>
+                                            <b>ItemSubCategory successfully added.</b>
                                           </div>');
-                return $this -> redirect(array('controller' => 'item_category', 'action' => 'view'));
+                return $this -> redirect(array('controller' => 'item_sub_category', 'action' => 'view', $id));
             } else {
                 //Failed to add
                 $this->Session->setFlash('<div class="alert alert-danger alert-dismissable">
                                           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                             <b>Oops! Something went wrong. Please try again later.</b>
                                           </div>');
-                return $this -> redirect(array('controller' => 'item_category', 'action' => 'add'));
+                return $this -> redirect(array('controller' => 'item_sub_category', 'action' => 'add', $id));
             }
         }
     }
 
     /**
-    *   Edit ItemCategory
+    *   Edit ItemSubCategory
     *
     * @return void
     */
@@ -62,27 +62,27 @@ class ItemCategoryController extends AppController
         $this->layout = 'base_layout';
         $this -> set('page_title', 'Edit Item category');
 
-        $tmp = $this->ItemCategory->findById($id);
+        $tmp = $this->ItemSubCategory->findById($id);
         $this->set('data', $tmp);
         if($this->request->is('post'))
         {
             $data = $this->request->data;
 
-            $this->ItemCategory->id = $id;
-            if ($this->ItemCategory->save($data)) {
+            $this->ItemSubCategory->id = $id;
+            if ($this->ItemSubCategory->save($data)) {
                 //Successfully modified.
                 $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
                                           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                            <b>ItemCategory successfully modified.</b>
+                                            <b>ItemSubCategory successfully modified.</b>
                                           </div>');
-                return $this -> redirect(array('controller' => 'item_category', 'action' => 'view'));
+                return $this -> redirect(array('controller' => 'item_sub_category', 'action' => 'view', $tmp['ItemSubCategory']['item_category_id']));
             } else {
                 //Failed to add
                 $this->Session->setFlash('<div class="alert alert-danger alert-dismissable">
                                           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                             <b>Oops! Something went wrong. Please try again later.</b>
                                           </div>');
-                return $this -> redirect(array('controller' => 'item_category', 'action' => 'edit', $id));
+                return $this -> redirect(array('controller' => 'item_sub_category', 'action' => 'edit', $tmp['ItemSubCategory']['item_category_id']));
             }
         }
 
@@ -90,46 +90,45 @@ class ItemCategoryController extends AppController
 
 
     /**
-    *   View ItemCategory
+    *   View ItemSubCategory
     *
     * @return void
     */
-    public function view()
+    public function view($category_id = null)
     {
         $this->layout = 'base_layout';
-        $this -> set('page_title', 'View Item Categories');
+        $this -> set('page_title', 'View Item Sub Categories');
 
         $this->Paginator->settings = array(
             'limit' => 10,
-            'order' => 'ItemCategory.created DESC',
+            'order' => 'ItemSubCategory.created DESC',
             'conditions' => [
-                'ItemCategory.is_active' => 1,
-                'ItemCategory.del_flag !=' => 1
-            ],
-            'contain' => [
-                'ItemSubCategory'
+                'ItemSubCategory.item_category_id' => $category_id,
+                'ItemSubCategory.is_active' => 1,
+                'ItemSubCategory.del_flag !=' => 1
             ]
         );
-        $data = $this->Paginator->paginate('ItemCategory');
-        // pr($data);
-        $this->set('item_categories', $data);
+        $data = $this->Paginator->paginate('ItemSubCategory');
+        $this->set('item_sub_categories', $data);
+        $this->set('item_category_id', $category_id);
     }
 
     /**
-    *   Delete ItemCategory
+    *   Delete ItemSubCategory
     *
     * @return redirect
     */
     public function delete($id = null)
     {
         if ($id != null) {
-            $this->ItemCategory->id = $id;
+            $this->ItemSubCategory->id = $id;
+            $sub_cat = $this->ItemSubCategory->findById($id);
             $tmp = [];
-            $tmp['ItemCategory']['del_flag'] = 1;
-            if ($this->ItemCategory->save($tmp)) {
+            $tmp['ItemSubCategory']['del_flag'] = 1;
+            if ($this->ItemSubCategory->save($tmp)) {
                 $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
                                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                            ItemCategory successfully deleted.
+                                            ItemSubCategory successfully deleted.
                                           </div>');
             } else {
                 $this->Session->setFlash('<div class="alert alert-danger alert-dismissable">
@@ -138,44 +137,45 @@ class ItemCategoryController extends AppController
                                           </div>');
             }
 
-            return $this->redirect($this->Auth->redirectUrl(array('controller'=>'item_category','action'=>'view')));
+            return $this->redirect($this->Auth->redirectUrl(array('controller'=>'item_sub_category','action'=>'view', $sub_cat['ItemSubCategory']['item_category_id'])));
         }
     }
 
+
     //-------------------------------------------------------------------------------
     // API
-    public function getCategories()
+    public function getSubCategories()
     {
         if ($this->request->is('post')) {
-            // $data = $this->request->input('json_decode',true);
-            $this->ItemCategory->Behaviors->load('Containable');
+            $data = $this->request->input('json_decode',true);
+            $this->ItemSubCategory->Behaviors->load('Containable');
 
-            $categories = $this->ItemCategory->find('all',
+            $sub_categories = $this->ItemSubCategory->find('all',
                 [
                     'conditions' => [
-                        'ItemCategory.is_active' => 1,
-                        'ItemCategory.del_flag' => 0
+                        'ItemSubCategory.is_active' => 1,
+                        'ItemSubCategory.del_flag' => 0,
+                        'ItemSubCategory.item_category_id' => $data['category_id']
                     ],
                     'contain' => []
                 ]
             );
 
-            if (!empty($categories)) {
+            if (!empty($sub_categories)) {
                 $res = new ResponseObject ( ) ;
                 $res -> status = 'success' ;
-                $res -> data = $categories ;
-                $res -> message = 'Item categories found.' ;
+                $res -> data = $sub_categories ;
+                $res -> message = 'Item sub categories found.' ;
                 $this -> response -> body ( json_encode ( $res ) ) ;
                 return $this -> response ;
             } else {
                 $res = new ResponseObject ( ) ;
                 $res -> status = 'error' ;
-                $res -> message = 'no categories found.' ;
+                $res -> message = 'no sub categories found.' ;
                 $this -> response -> body ( json_encode ( $res ) ) ;
                 return $this -> response ;
             }
         }
     }
-
 }
 ?>

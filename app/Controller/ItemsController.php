@@ -47,6 +47,9 @@ class ItemsController extends AppController
         if($this->request->is('post'))
         {
             $data = $this->request->data;
+            if (empty($data['Item']['item_sub_category_id'])) {
+                $data['Item']['item_sub_category_id'] = null;
+            }
 
             if ($resp = $this->Item->save($data)) {
                 $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
@@ -96,6 +99,9 @@ class ItemsController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->data;
             $this->Item->id = $id;
+            if (empty($data['Item']['item_sub_category_id']) || $data['Item']['item_sub_category_id'] == 'undefined') {
+                $data['Item']['item_sub_category_id'] = null;
+            }
 
             if ($this->Item->save($data)) {
                 //Successfully modified.
