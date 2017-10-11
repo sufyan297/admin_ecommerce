@@ -1,6 +1,11 @@
 # Admin Panel for E-Commerce #
 
-# Tag: v.0.0.3 (Date: 10th October 2017)
+# Tag: v0.0.4 (Date: 11th Ocotober 2017)
+- Seller support added for child items.
+- Few Minor bugs fixes.
+- Special Component added.
+
+# Tag: v0.0.3 (Date: 10th October 2017)
 - Dashboard updated.
 - Items CRUD Updated.
 - Sub Category CRUD added.
