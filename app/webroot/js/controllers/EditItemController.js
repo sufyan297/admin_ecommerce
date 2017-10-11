@@ -26,7 +26,7 @@
                 //Success
                 if (resp.data.status == 'success') {
                     console.log("RESPONSE:",resp);
-                    growl.info('Item categories fetched.');
+                    // growl.info('Item categories fetched.');
 
                     $scope.obj.categories = resp.data.data;
 
@@ -96,6 +96,13 @@
         $scope.variants = [
             {
                 id: null, //ChildItemID
+                sellers: [
+                    {
+                        id: null,
+                        price: 0.00,
+                        discount_price: 0.00
+                    }
+                ],
                 sub_variants: [
                     {
                         variant_id: '',
@@ -109,6 +116,7 @@
         ];
 
         $scope.all_variants = [];
+        $scope.all_sellers = [];
         $scope.item_id = document.getElementById('data_item_id').value;
         //---------------------------------------------------------------------------
 
@@ -119,6 +127,13 @@
             $scope.variants.push(
                 {
                     id: null, //ChildItemID
+                    sellers: [
+                        {
+                            id: null,
+                            price: 0.00,
+                            discount_price: 0.00
+                        }
+                    ],
                     sub_variants: [
                         {
                             variant_id: '',
@@ -150,7 +165,21 @@
             );
         };
 
-        $scope.removeSubVariant = function addSubVariant(var_idx, sub_var_idx)
+        $scope.addSeller = function addSeller(var_idx, sub_var_idx)
+        {
+            console.log("[Add] Variant Idx:",var_idx);
+            console.log("[Add] SUB Variant Idx: ", sub_var_idx);
+
+            $scope.variants[var_idx].sellers.push(
+                {
+                    id: null,
+                    price: 0.00,
+                    discount_price: 0.00
+                }
+            );
+        };
+
+        $scope.removeSubVariant = function removeSubVariant(var_idx, sub_var_idx)
         {
             console.log("[Remove] Variant Idx:",var_idx);
             console.log("[Remove] SUB Variant Idx: ", sub_var_idx);
@@ -158,6 +187,14 @@
             $scope.variants[var_idx].sub_variants.splice(sub_var_idx, 1);
         };
 
+
+        $scope.removeSeller = function removeSeller(var_idx, sub_var_idx)
+        {
+            console.log("[Remove] Seller Idx:",var_idx);
+            console.log("[Remove] SUB Seller Idx: ", sub_var_idx);
+
+            $scope.variants[var_idx].sellers.splice(sub_var_idx, 1);
+        };
 
         //--------------------------------
         //  Setters
@@ -222,6 +259,33 @@
         //---------------------
         //Getters
         //--------------------
+        $scope.getSellers = function getSellers()
+        {
+            var req = {
+    		    method: 'POST',
+    		    url: baseUrl + 'sellers/getAllSellers'
+            };
+
+            $http(req)
+    		.then(function successCallback(resp) {
+                //Success
+                if(resp.data.status == 'success')
+                {
+                    console.log("SUCCESS",resp);
+                    $scope.all_sellers = resp.data.data;
+
+                    addSelect2();
+                }
+                else {
+                    console.log("Failed!!");
+                    // console.log(response);
+                    $scope.all_sellers = [];
+                }
+    		}, function errorCallback(response) {
+    		    console.log(response);
+    		});
+        };
+
         $scope.getVariants = function getVariants()
         {
             var req = {
@@ -315,6 +379,35 @@
             });
         };
 
+        function sellerIsAlreadySelected(var_idx, sub_var_idx, _seller_id)
+        {
+            var flg = false;
+            var idx = 0;
+            $scope.variants[var_idx].sellers.forEach(function(row) {
+                if (row.id === _seller_id) {
+                    console.log("Row:- ",row);
+                    idx++;
+                }
+            });
+
+            if (idx === 2) {
+                flg = true;
+            }
+            return flg;
+        }
+        //Seller Check
+        //One Child Item should not have same seller for more than once.
+        $scope.checkSellers = function checkSellers(var_idx, sub_var_idx, _seller_id, old_seller_id)
+        {
+            //First check: This Seller is already selected before or not. if Yes restrict it.
+            var chk = sellerIsAlreadySelected(var_idx, sub_var_idx, _seller_id);
+
+            if (chk === true) {
+                $scope.variants[var_idx].sellers[sub_var_idx].id = old_seller_id;
+                return growl.error("Oops! That seller is already selected for this child item.");
+            }
+
+        };
 
         //------------------------------
         //get Variant
@@ -357,6 +450,7 @@
 
         //CallBacks
         $scope.getVariants();
+        $scope.getSellers();
         getChildItems();
     }]);
 

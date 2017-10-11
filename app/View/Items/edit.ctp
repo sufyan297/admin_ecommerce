@@ -235,7 +235,7 @@
     <!-- Item Variants -->
 
     <div class="row">
-		<div class="col-md-6" ng-repeat="var in variants track by $index" ng-init="var_idx = $index">
+		<div class="col-md-12" ng-repeat="var in variants track by $index" ng-init="var_idx = $index">
 			<div class="box box-primary">
 				<div class="box-header with-border">
 	            <h3 class="box-title">Child Item {{var_idx + 1}}</h3>
@@ -256,29 +256,32 @@
                       <!-- Ok Great -->
 
                       <div class="row">
-                          <div class="col-md-4">
+                          <div class="col-md-6">
                               <div class="form-group">
-                                <label for="inputPrice">Price<span style='color: red;'>*</span></label>
-                                <?php echo $this->Form->input('price',array(
+                                <label for="inputPrice"><h4>Variants</h4></label>
+                                <hr />
+                                <?php /*echo $this->Form->input('price',array(
                                   'id' => 'inputPrice',
                                   'class'=>"form-control",
                                   'placeholder'=>'Enter Price',
                                   'label'=>false,
                                   'ng-model' => 'var.price'
-                                ));
+                              ));*/
                                 ?>
                               </div>
                           </div>
-                          <div class="col-md-4">
+                          <div class="col-md-6">
                               <div class="form-group">
-                                <label for="inputDiscountPrice">Discount Price<span style='color: red;'>*</span></label>
-                                <?php echo $this->Form->input('discount_price',array(
+                                <label for="inputDiscountPrice"><h4>Sellers</h4></label>
+                                <hr />
+
+                                <?php /*echo $this->Form->input('discount_price',array(
                                   'id' => 'inputDiscountPrice',
                                   'class'=>"form-control",
                                   'placeholder'=>'Enter Discount Price',
                                   'label'=>false,
                                   'ng-model' => 'var.discount_price'
-                                ));
+                              ));*/
                                 ?>
                               </div>
                           </div>
@@ -286,46 +289,105 @@
                       <!-- Row Ends Here -->
 
                       <!-- Row Start -->
-                      <div class="row" ng-repeat="sub_var in var.sub_variants track by $index" ng-init="sub_var_idx = $index">
-                          <div class="col-md-4">
-                              <div class="form-group">
-                                    <label for="inputVariantName">Variant Name<span style='color: red;'>*</span></label>
-                                    <select class="form-control select2" ng-model="sub_var.variant_id" style="width: 100%;" ng-init="old_variant_id = sub_var.variant_id" ng-change="getVariantProperties(var_idx, sub_var_idx, sub_var.variant_id, old_variant_id)">
-                                        <option ng-repeat="option in all_variants" value="{{option.Variant.id}}">{{option.Variant.name}}</option>
-                                    </select>
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="row" ng-repeat="sub_var in var.sub_variants track by $index" ng-init="sub_var_idx = $index">
+                                  <!-- Variants -->
+                                  <div class="col-md-4">
+                                      <div class="form-group">
+                                            <label for="inputVariantName">Variant Name<span style='color: red;'>*</span></label>
+                                            <select class="form-control select2" ng-model="sub_var.variant_id" style="width: 100%;" ng-init="old_variant_id = sub_var.variant_id" ng-change="getVariantProperties(var_idx, sub_var_idx, sub_var.variant_id, old_variant_id)">
+                                                <option ng-repeat="option in all_variants" value="{{option.Variant.id}}">{{option.Variant.name}}</option>
+                                            </select>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                      <div class="form-group">
+                                            <label for="inputVariantProperty">Variant Property<span style='color: red;'>*</span></label>
+                                            <!-- New addition -->
+                                            <select class="form-control select2" ng-model="sub_var.variant_property_id" style="width: 100%;">
+                                                <option ng-repeat="option in sub_var.all_properties" value="{{option.VariantProperty.id}}">{{option.VariantProperty.name}}</option>
+                                            </select>
+                                            <!-- okao skdo -->
+                                      </div>
+                                  </div>
+
+                                  <div class="col-md-4">
+                                      <div class="form-group">
+                                          <!-- <br/> -->
+                                          <label for="inputVariantName">&nbsp;</label>
+                                          <button class="btn btn-danger btn-block" ng-click="removeSubVariant(var_idx, sub_var_idx)">
+                                              <i class="fa fa-times"></i> Remove
+                                          </button>
+                                      </div>
+                                  </div>
+                                  <!-- Variants Ends Here -->
                               </div>
                           </div>
-                          <div class="col-md-4">
-                              <div class="form-group">
-                                    <label for="inputVariantProperty">Variant Property<span style='color: red;'>*</span></label>
-                                    <!-- New addition -->
-                                    <select class="form-control select2" ng-model="sub_var.variant_property_id" style="width: 100%;">
-                                        <option ng-repeat="option in sub_var.all_properties" value="{{option.VariantProperty.id}}">{{option.VariantProperty.name}}</option>
-                                    </select>
-                                    <!-- okao skdo -->
 
+                          <!-- Sellers with Price -->
+                          <div class="col-md-6">
+                              <div class="row" ng-repeat="seller in var.sellers track by $index" ng-init="sub_var_idx = $index">
+                                  <!-- Variants -->
+                                  <div class="col-md-4">
+                                      <div class="form-group">
+                                            <label for="inputSellerName">Seller Name<span style='color: red;'>*</span></label>
+                                            <select id="inputSellerName" class="form-control select2" ng-model="seller.id" style="width: 100%;" ng-init="old_seller_id = seller.id" ng-change="checkSellers(var_idx, sub_var_idx, seller.id, old_seller_id)" required>
+                                                <option ng-repeat="option in all_sellers" value="{{option.Seller.id}}">{{option.Seller.name}}</option>
+                                            </select>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-3">
+                                      <div class="form-group">
+                                            <label for="inputSellerPrice">Seller Price<span style='color: red;'>*</span></label>
+                                            <!-- New addition -->
+                                            <input id="inputSellerPrice" type="text" ng-model="seller.price" class="form-control" required/>
+                                            <!-- okao skdo -->
+                                      </div>
+                                  </div>
+                                  <div class="col-md-3">
+                                      <div class="form-group">
+                                            <label for="inputDiscountPrice">Seller Discount Price<span style='color: red;'>*</span></label>
+                                            <!-- New addition -->
+                                            <input id="inputDiscountPrice" type="text" ng-model="seller.discount_price" class="form-control" required/>
+                                            <!-- okao skdo -->
+                                      </div>
+                                  </div>
+
+                                  <div class="col-md-2">
+                                      <div class="form-group">
+                                          <!-- <br/> -->
+                                          <label for="inputVariantName">&nbsp;</label>
+                                          <button class="btn btn-danger btn-block" ng-click="removeSeller(var_idx, sub_var_idx)">
+                                              <i class="fa fa-times"></i> Remove
+                                          </button>
+                                      </div>
+                                  </div>
+                                  <!-- Variants Ends Here -->
                               </div>
                           </div>
-
-                          <div class="col-md-2">
-                              <div class="form-group">
-                                  <!-- <br/> -->
-                                  <label for="inputVariantName">&nbsp;</label>
-                                  <button class="btn btn-danger btn-block" ng-click="removeSubVariant(var_idx, sub_var_idx)">
-                                      <i class="fa fa-times"></i> Remove
-                                  </button>
-                              </div>
-                          </div>
-
+                          <!-- Seller Ends Here -->
                       </div>
 
                       <div class="row">
-                          <div class="col-md-8">
+                          <!-- Add Variant -->
+                          <div class="col-md-6">
                               <div class="form-group">
                                   <!-- <br/> -->
                                   <label for="inputVariantName">&nbsp;</label>
                                   <button class="btn btn-success btn-block" ng-click="addSubVariant(var_idx, sub_var_idx)">
                                       <i class="fa fa-plus"></i> Add Variant
+                                  </button>
+                              </div>
+                          </div>
+
+                          <!-- Add Seller -->
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <!-- <br/> -->
+                                  <label for="inputVariantName">&nbsp;</label>
+                                  <button class="btn btn-success btn-block" ng-click="addSeller(var_idx, sub_var_idx)">
+                                      <i class="fa fa-plus"></i> Add Seller
                                   </button>
                               </div>
                           </div>

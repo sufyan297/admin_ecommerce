@@ -3,8 +3,8 @@ App::uses('AppController', 'Controller');
 
 class ItemsController extends AppController
 {
-    public $components = array('Paginator');
-    public $uses = array('ItemCategory','Item','Variant','VariantProperty','ItemVariant','SellerItem');
+    public $components = array('Paginator','Special');
+    public $uses = array('ItemCategory','Item','Variant','VariantProperty','ItemVariant','SellerItem','Seller');
 
     public function beforeFilter()
     {
@@ -298,14 +298,35 @@ class ItemsController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->input('json_decode',true);
 
+            $sorted_seller = [];
+            //----------------------------------------------------------------------------
+            if (isset($data['variant']['sellers']) && sizeof($data['variant']['sellers']) > 0) {
+                //Sorted Seller List by Least discount Price on Top
+                $sorted_seller = $this->Special->sortMultiArray('discount_price',$data['variant']['sellers']);
+
+                $this->log("SORTED_ARRAY:");
+                $this->log($sorted_seller);
+
+                foreach ($sorted_seller as $key => $val) {
+                    //Least Price for a Item Table
+                    $data['variant']['price'] = $val['price'];
+                    $data['variant']['discount_price'] = $val['discount_price'];
+                    break;
+                }
+            }
+            //----------------------------------------------------------------------------
+
             //Save Item Price
             $child_item = $this->_addItemChild($data['item_id'],$data['variant']['id'], $data['variant']['price'], $data['variant']['discount_price']);
             if ($child_item != false) {
                 //AddThisItemForLoggedInSeller
                 //For Now let's add for just single seller
                 $this->_removeExistingSellerItems($child_item['Item']['id']);
-                //
-                $this->_addSellerItem($child_item['Item']['id'], 'self', $data['variant']['price'], $data['variant']['discount_price']); //
+
+                foreach ($sorted_seller as $key => $val) {
+                    $this->_addSellerItem($child_item['Item']['id'], $val['id'], $val['price'], $val['discount_price']); //
+                }
+
                 //-------------------
                 //remove existing variants
                 $this->_removeExistingVariants($child_item['Item']['id']);
@@ -459,6 +480,7 @@ class ItemsController extends AppController
                             ]
                         ],
                         'ChildItems.ItemVariant',
+                        'ChildItems.SellerItem',
                         // 'ChildItems.ItemVariant.Variant' => [
                         //     'fields' => [
                         //         'Variant.id',
@@ -484,8 +506,8 @@ class ItemsController extends AppController
             //vars
             $child_items = [];
 
-            // $this->log("ITEM");
-            // $this->log($item);
+            $this->log("ITEM");
+            $this->log($item);
 
             // //getChildItems
             foreach ($item['ChildItems'] as $key => $value) {
@@ -495,6 +517,8 @@ class ItemsController extends AppController
                 $tmp['discount_price'] = $value['discount_price'];
 
                 $tmp['sub_variants'] = [];
+                $tmp['sellers'] = [];
+
                 foreach ($value['ItemVariant'] as $key => $val2) {
                     $tmp2 = [];
                     $tmp2['variant_id'] = $val2['variant_id'];
@@ -512,6 +536,14 @@ class ItemsController extends AppController
                     // $this->log($tmp2);
 
                     array_push($tmp['sub_variants'], $tmp2);
+                }
+                foreach ($value['SellerItem'] as $key => $val3) {
+                    $tmp4 = [];
+                    $tmp4['id'] = $val3['seller_id'];
+                    $tmp4['price'] = $val3['price'];
+                    $tmp4['discount_price'] = $val3['discount_price'];
+
+                    array_push($tmp['sellers'], $tmp4);
                 }
                 // $this->log("CHILD_ITEM");
                 // $this->log($tmp);

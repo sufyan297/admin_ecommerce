@@ -138,5 +138,38 @@ class SellersController extends AppController
         }
     }
 
+
+    public function getAllSellers()
+    {
+        if ($this->request->is('post')) {
+
+            $tmp = $this->Seller->find('all',
+                [
+                    'conditions' => [
+                        'Seller.is_active' => 1,
+                        'Seller.del_flag !=' => 1
+                    ],
+                    'fields' => [
+                        'Seller.id',
+                        'Seller.name'
+                    ]
+                ]
+            );
+
+            $res = new ResponseObject ( ) ;
+            $res -> status = 'success' ;
+            $res -> data = $tmp ;
+            $res -> message = 'Sellers are fetched.' ;
+            $this -> response -> body ( json_encode ( $res ) ) ;
+            return $this -> response ;
+        } else {
+            $res = new ResponseObject ( ) ;
+            $res -> status = 'error' ;
+            $res -> message = 'INVALID_METHOD.' ;
+            $this -> response -> body ( json_encode ( $res ) ) ;
+            return $this -> response ;
+        }
+    }
+
 }
 ?>
