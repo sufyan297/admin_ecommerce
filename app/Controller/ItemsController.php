@@ -561,5 +561,14 @@ class ItemsController extends AppController
         }
     }
 
+    /**
+    *   Bulk Items Upload
+    *
+    * @return void
+    */
+    public function bulkUploadItems()
+    {
+        
+    }
 }
 ?>
