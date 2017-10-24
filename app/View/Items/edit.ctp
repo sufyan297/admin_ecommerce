@@ -152,6 +152,19 @@
                               </div>
                           </div>
 
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="inputLongDescription">Long Description<span style='color: red;'>*</span></label>
+                                <?php echo $this->Form->textarea('long_desc',array(
+                                  'id' => 'inputLongDescription',
+                                  'class'=>"form-control",
+                                  'placeholder'=>'Long description',
+                                  'label'=>false,
+                                  'value' => $data['Item']['long_desc']
+                                ));
+                                ?>
+                              </div>
+                          </div>
                       </div>
                       <!-- Ends Here -->
 	            	</div>
@@ -422,5 +435,9 @@
 	</div>
     <!-- Ends Here -->
 </section>
-
+<script>
+    $(document).ready(function() {
+        $('#inputLongDescription').autogrow({vertical: true, horizontal: false});
+    });
+</script>
 <?php $this->end('main-content'); ?>

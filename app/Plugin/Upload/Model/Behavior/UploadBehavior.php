@@ -223,6 +223,16 @@ class UploadBehavior extends ModelBehavior {
 				continue;
 			}
 
+            /**
+            * Replace file name space with underscore
+            *
+            * @author Mohammed Sufyan Shaikh <sufyan297@gmail.com>
+            */
+            if (isset($model->data[$model->alias][$field])) {
+                $model->data[$model->alias][$field] = str_replace(' ','_',$model->data[$model->alias][$field]);
+            }
+            //-----------------------------------------------------------------------
+
 			$this->runtime[$model->alias][$field] = $model->data[$model->alias][$field];
 
 			$removing = !empty($model->data[$model->alias][$field]['remove']);

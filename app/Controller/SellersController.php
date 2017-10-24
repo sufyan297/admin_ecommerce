@@ -33,7 +33,7 @@ class SellersController extends AppController
         if($this->request->is('post'))
         {
             $data = $this->request->data;
-
+            $data['Seller']['seller_no'] = $this->_getNextSellerNo();
             if ($this->Seller->save($data)) {
                 //Successfully added.
                 $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
@@ -138,6 +138,25 @@ class SellersController extends AppController
         }
     }
 
+    private function _getNextSellerNo()
+    {
+        $seller = $this->Seller->find('first',
+            [
+                'order' => 'Seller.created DESC',
+                'fields' => [
+                    'Seller.seller_no'
+                ]
+            ]
+        );
+
+        $next_no = "1";
+        if (empty($seller)) {
+            return str_pad($next_no, 3, "0", STR_PAD_LEFT);
+        } else {
+            $next_no = (string) ((int) ($seller['Seller']['seller_no'] + 1));
+            return str_pad($next_no, 3, "0", STR_PAD_LEFT);
+        }
+    }
 
     public function getAllSellers()
     {

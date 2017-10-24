@@ -56,6 +56,20 @@
 						  ?>
 						</div>
 
+                        <div class="form-group">
+                          <label for="inputDescription">How it look?</label>
+                          <?php echo $this->Form->input('how_it_looks',array(
+                            'id' => 'inputDescription',
+                            'class'=>"form-control",
+                            'options' => ['text' => 'TextBox', 'color' => 'ColorBox'], //, 'image' => 'PictureBox'
+                            'label'=>false,
+                            'required' => 'required',
+                            'autofocus' => 'autofocus',
+                            'value' => $data['Variant']['how_it_looks']
+                          ));
+                          ?>
+                        </div>
+
 	            	</div>
 	              <!-- /.box-body -->
 

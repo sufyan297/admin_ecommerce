@@ -19,6 +19,13 @@ class ItemsController extends AppController
     }
 
 
+    //Private functions
+    private function _checkUrlSlag($url_slag = null)
+    {
+        // $tmp = $this->Item->
+    }
+
+
     /**
     *   ADD Item
     *
@@ -568,7 +575,7 @@ class ItemsController extends AppController
     */
     public function bulkUploadItems()
     {
-        
+
     }
 }
 ?>

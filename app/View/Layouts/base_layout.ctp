@@ -26,6 +26,9 @@
         echo $this->Html->css('style');
 
         echo $this->Html->script('jQuery/jquery-2.2.3.min');
+
+        echo $this->Html->script('jquery-autogrow.min');
+
         //Angular
         echo $this->Html->script('angular.min');
         echo $this->Html->script('angular-growl.min');

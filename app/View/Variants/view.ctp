@@ -36,6 +36,7 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Description</th>
+                                <th>How it looks?</th>
                                 <th>Add Property</th>
                                 <th>View Properties</th>
                                 <th>Edit</th>
@@ -58,6 +59,10 @@
                                     <?php echo $data['Variant']['description']; ?>
                                 </td>
 
+                                <td>
+                                    <?= $data['Variant']['how_it_looks'] ?>
+                                </td>
+                                
                                 <td>
                                     <?php
                                     echo $this->Html->link($this->Html->tag('i', '',array('class' => 'fa fa-plus')),array('controller'=>'variants','action'=>'add_property/'.$data['Variant']['id']),array('class'=>'btn btn-info btn-circle', 'escape' => false));

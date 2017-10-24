@@ -41,19 +41,18 @@
       			              </tr>
       			            </thead>
                         <tbody class="tbody">
-                          <?php $no = 0; $i = 1;?>
                           <?php foreach ($sellers as $data): ?>
 
                             <tr style="cursor: pointer;">
 
-                                <td><span><?php echo $i++; ?></span></td>
+                                <td><span><?= $data['Seller']['seller_no'] ?></span></td>
 
                                 <td>
-                                    <?php echo $data['Seller']['name']; ?>
+                                    <?= $data['Seller']['name']; ?>
                                 </td>
 
                                 <td>
-                                    <?php echo $data['Seller']['description']; ?>
+                                    <?= $data['Seller']['description']; ?>
                                 </td>
 
                                 <td>
@@ -69,23 +68,22 @@
                                 </td>
 
                           </tr>
-                          <?php $no = $no + 1; ?>
                         <?php endforeach; ?>
 
                       </tbody>
                     </table>
-            <ul class="pagination" style="float: right;">
-            <?php
+                <ul class="pagination" style="float: right;">
+                <?php
 
-                echo $this->Paginator->prev(__('Previous'), array('tag' => 'li'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
-                echo $this->Paginator->numbers(array('separator' => '','currentTag' => 'a', 'currentClass' => 'active','tag' => 'li','first' => 1));
-                echo $this->Paginator->next(__('Next'), array('tag' => 'li','currentClass' => 'disabled'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
+                    echo $this->Paginator->prev(__('Previous'), array('tag' => 'li'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
+                    echo $this->Paginator->numbers(array('separator' => '','currentTag' => 'a', 'currentClass' => 'active','tag' => 'li','first' => 1));
+                    echo $this->Paginator->next(__('Next'), array('tag' => 'li','currentClass' => 'disabled'), null, array('tag' => 'li','class' => 'disabled','disabledTag' => 'a'));
 
-            ?>
-            </ul>
-            <?php
-                echo $this->Paginator->counter(array('format' => 'range'));
-            ?>
+                ?>
+                </ul>
+                <?php
+                    echo $this->Paginator->counter(array('format' => 'range'));
+                ?>
                 </div><!-- /.box -->
               </div>
             </div>
