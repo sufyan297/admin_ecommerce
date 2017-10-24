@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class ItemsController extends AppController
 {
     public $components = array('Paginator','Special');
-    public $uses = array('ItemCategory','Item','Variant','VariantProperty','ItemVariant','SellerItem','Seller');
+    public $uses = array('ItemCategory','Item','Variant','VariantProperty','ItemVariant','SellerItem','Seller','ItemSubCategory');
 
     public function beforeFilter()
     {
@@ -573,9 +573,128 @@ class ItemsController extends AppController
     *
     * @return void
     */
-    public function bulkUploadItems()
+    public function bulk_upload_items()
     {
+        error_reporting(0);
+        if($this->request->is('post'))
+        {
+            $data = $this->request->data;
+            $file=$this->data['BulkItem']['file'];
+            $organization_id = $data['BulkItem']['organization_id'];
 
+            $file_name=$this->data['BulkItem']['file']['name'];
+            $target_path = APP."uploads/";
+            $path_parts = pathinfo($this->data['BulkItem']['file']['name']);
+            $extension = $path_parts['extension'];
+
+
+            if ($extension == "xls" || $extension == "xlsx")
+            {
+                $target_path = $target_path."bulk_items.".$extension;
+                move_uploaded_file($this->data['BulkItem']['file']['tmp_name'], $target_path);
+
+                //PHP Import
+                $path = ROOT . DS . "vendors" . DS. "Classes" . DS;
+                ini_set('max_execution_time', 1000000); //increase max_execution_time to 10 min if data set is very large
+                set_include_path($path);
+                include 'PHPExcel/IOFactory.php';
+                try {
+                    $objPHPExcel = PHPExcel_IOFactory::load($target_path);
+                    $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+
+
+                    foreach ($sheetData as $key => $value) {
+                        $item_category_id = null;
+                        $item_sub_category_id = null;
+
+                        $item_category_id = $this->getCategoryId($value['B']);
+
+                        if ($item_category_id != false && !empty($value['C'])) {
+                            $item_sub_category_id = $this->getSubCategoryId($item_category_id, $value['C']);
+                        }
+
+
+
+                    }
+
+
+                    pr($sheetData);die();
+                } catch(Exception $e) {
+                    die('Error loading file "'.pathinfo($target_path,PATHINFO_BASENAME).'": '.$e->getMessage());
+                }
+
+            }
+        }
+    }
+
+    /**
+    *   Add Item
+    *
+    */
+    public function addItem($item_name = null, $item_category_id = null, $item_sub_category_id = null, $short_desc = null, $long_desc = null, $keywords = null)
+    {
+        $item = [];
+        $item['Item']['name'] = $item_name;
+        // $item['Item']['url_slag'] = null;
+        // $item['Item']['sku_code'] = null;
+        $item['Item']['item_id'] = null;
+        $item['Item']['short_desc'] = $short_desc;
+        $item['Item']['item_category_id'] = $item_category_id;
+        $item['Item']['item_sub_category_id'] = $item_sub_category_id;
+        $item['Item']['is_active'] = 1;
+        $item['Item']['del_flag'] = 0;
+
+        if ($resp = $this->Item->save($item)) {
+            return $resp;
+        }
+        return false;
+    }
+
+
+    /**
+    *   Get Category Id By Name
+    *
+    * @return item_category_id
+    */
+    public function getCategoryId($category_name = null)
+    {
+        if ($category_name != null) {
+            $this->ItemCategory->Behaviors->load('Containable');
+            $category_name = trim($category_name);
+            $cat = $this->ItemCategory->findByName($category_name);
+
+            if (!empty($cat)) {
+                return $cat['ItemCategory']['id'];
+            }
+        }
+        return false;
+    }
+
+
+    /**
+    *   Get Subcategory Id
+    *
+    * @return sub_category_id
+    */
+    public function getSubCategoryId($item_category_id = null, $sub_category_name = null)
+    {
+        if ($item_category_id != null && $sub_category_name != null) {
+            $sub_category_name = trim($sub_category_name);
+
+            $cat = $this->ItemSubCategory->find('first',
+                [
+                    'conditions' => [
+                        'ItemSubCategory.item_category_id' => $item_category_id,
+                        'ItemSubCategory.name' => $sub_category_name
+                    ]
+                ]
+            );
+
+            if (!empty($cat)) {
+                return $cat['ItemSubCategory']['id'];
+            }
+        }
+        return false;
     }
 }
 ?>

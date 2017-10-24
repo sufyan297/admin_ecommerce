@@ -47,6 +47,46 @@
                         <?php echo $this->Form->end(); ?>
                     </div>
                 </div>
+
+                <!-- left column -->
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <!-- HEADER -->
+                        <div class="box-header with-border">
+            	            <h3 class="box-title">Add Bulk items</h3>
+
+                            <div class="box-tools pull-right">
+        		                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+        		                </button>
+        		                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        		            </div>
+                        </div>
+                        <!-- BODY -->
+                        <?php echo $this->Form->create('BulkItem',array('url'=>array('controller'=>'items','action'=>'bulk_upload_items'),'class'=>'form-signin','type'=>'file','role'=>'form', 'multiple')); ?>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Excel File: </label><span style="color:red;">*</span>
+                                        <?php
+                                            echo $this->Form->input("file",array('type'=>'file','class'=>'form-control','label'=>false,'autofocus'=>true,'required'=>'required'));
+                                        ?>
+                                        <label><span style="color: red;">Format:</span> 1 - Item Name, 2 - Item Category Name, 3 - Item Sub Category Name, 4 - Short Description, 5 - Long Description, 6 - Keywords</label>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="box-footer">
+                                <?php
+                                    echo $this->Form->input('Upload Bulk Items',array('class'=>'btn btn-primary pull-right','type'=>'submit','label'=>false));
+                                ?>
+                            </div>
+                        </div>
+                        <?php echo $this->Form->end(); ?>
+                    </div>
+                </div>
+
             </diV>
             <div class="row">
               <div class="row" style="padding-left: 10px;">
