@@ -1,6 +1,12 @@
 # Admin Panel for E-Commerce #
 
-# Tag: v0.0.4 (Date: 11th Ocotober 2017)
+# Tag: v0.0.5 (Date: 24th October 2017)
+- Seller No. added for Sellers.
+- Long description added in Items CRUD.
+- Variants options (How it looks on view side such as: TextBox,ColorBox)
+- Auto Textarea Grow script added.
+
+# Tag: v0.0.4 (Date: 11th October 2017)
 - Seller support added for child items.
 - Few Minor bugs fixes.
 - Special Component added.
