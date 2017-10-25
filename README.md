@@ -1,5 +1,10 @@
 # Admin Panel for E-Commerce #
 
+# Tag: v0.0.6 (Date: 25th October 2017)
+- Bulk Item upload added.
+- Few Minor Bug fixes.
+- Handled Url slag uniqueness.
+
 # Tag: v0.0.5 (Date: 24th October 2017)
 - Seller No. added for Sellers.
 - Long description added in Items CRUD.
