@@ -57,6 +57,10 @@ class ItemsController extends AppController
             if (empty($data['Item']['item_sub_category_id'])) {
                 $data['Item']['item_sub_category_id'] = null;
             }
+            $chk_url_slag = $this->url_slag_exists($data['Item']['url_slag']);
+            if ($chk_url_slag != false) {
+                $data['Item']['url_slag'] = $chk_url_slag;
+            }
 
             if ($resp = $this->Item->save($data)) {
                 $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
@@ -602,23 +606,51 @@ class ItemsController extends AppController
                     $objPHPExcel = PHPExcel_IOFactory::load($target_path);
                     $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 
-
+                    $success_count = 0;
+                    $failure_count = 0;
+                    $idx = 0;
                     foreach ($sheetData as $key => $value) {
-                        $item_category_id = null;
-                        $item_sub_category_id = null;
+                        if ($idx != 0) { //Ignore Header Line Which is First Line in Excel Sheet
 
-                        $item_category_id = $this->getCategoryId($value['B']);
+                            $chk_flg = false;
+                            $item_category_id = null;
+                            $item_sub_category_id = null;
 
-                        if ($item_category_id != false && !empty($value['C'])) {
-                            $item_sub_category_id = $this->getSubCategoryId($item_category_id, $value['C']);
+                            $item_category_id = $this->getCategoryId($value['B']);
+
+                            if ($item_category_id != false) {
+                                //If SubCategory Is available then get it's ID
+                                if (!empty($value['C'])) {
+                                    $item_sub_category_id = $this->getSubCategoryId($item_category_id, $value['C']);
+                                }
+                                //-------------------------------------------------------
+
+                                $resp = $this->addItem($value['A'], $item_category_id, $item_sub_category_id, $value['D'], $value['E'], $value['F']);
+                                if ($resp != false) {
+                                    //Successfully Inserted
+                                    //Success_Count ++;
+                                    $success_count ++;
+                                    $chk_flg = true;
+                                }
+                            }
+
+                            if ($chk_flg == false) {
+                                //Fail to Insert due to Invalid Category.
+                                //Or Something Went Wrong
+                                $failure_count ++;
+                            }
+
                         }
 
-
-
+                        $idx++;
                     }
+                    $tmp_msg = "Operation successfully completed.<br/> Successfully Added Items: <b>". $success_count . "</b><br/>Failed to Add Items: <b>".$failure_count."</b>";
+                    $this->Session->setFlash('<div class="alert alert-info alert-dismissable">
+                                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                                '.$tmp_msg.'
+                                              </div>');
 
-
-                    pr($sheetData);die();
+                    return $this -> redirect(array('controller' => 'items', 'action' => 'view'));
                 } catch(Exception $e) {
                     die('Error loading file "'.pathinfo($target_path,PATHINFO_BASENAME).'": '.$e->getMessage());
                 }
@@ -627,18 +659,50 @@ class ItemsController extends AppController
         }
     }
 
+    private function url_slag_exists($url_slag = null)
+    {
+        $new_url_slag = "";
+        $item = $this->Item->find('count',
+            [
+                'conditions' => [
+                    'Item.url_slag' => $url_slag,
+                    'Item.item_id' => null
+                ]
+            ]
+        );
+
+        if ($item != 0) {
+            //URL_SLAG_EXISTS
+            $new_url_slag = $url_slag."-".$item;
+            return $new_url_slag;
+        }
+        return false; //URL_SLAG_DOES_NOT_EXISTS
+    }
+
     /**
     *   Add Item
     *
     */
-    public function addItem($item_name = null, $item_category_id = null, $item_sub_category_id = null, $short_desc = null, $long_desc = null, $keywords = null)
+    public function addItem($item_name = null, $item_category_id = null, $item_sub_category_id = null, $short_desc = null, $long_desc = null, $keyword = null)
     {
         $item = [];
         $item['Item']['name'] = $item_name;
-        // $item['Item']['url_slag'] = null;
-        // $item['Item']['sku_code'] = null;
+
+        $url_slag = str_replace(" ","-", strtolower($item_name));
+        $url_slag = str_replace("'","", $url_slag);
+
+        $chk_url_slag = $this->url_slag_exists($url_slag);
+        if ($chk_url_slag != false) {
+            //Already_Exists_It Means we got another URL_SLAG
+            $url_slag = $chk_url_slag;
+        }
+
+        $item['Item']['url_slag'] = $url_slag;
+        $item['Item']['sku_code'] = null;
         $item['Item']['item_id'] = null;
         $item['Item']['short_desc'] = $short_desc;
+        $item['Item']['long_desc'] = $long_desc;
+        $item['Item']['keyword'] = $keyword;
         $item['Item']['item_category_id'] = $item_category_id;
         $item['Item']['item_sub_category_id'] = $item_sub_category_id;
         $item['Item']['is_active'] = 1;

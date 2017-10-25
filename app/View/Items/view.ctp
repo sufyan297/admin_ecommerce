@@ -6,7 +6,7 @@
           <section class="content">
 
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <div class="box box-primary">
                         <!-- HEADER -->
                         <div class="box-header with-border">
@@ -49,7 +49,7 @@
                 </div>
 
                 <!-- left column -->
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <div class="box box-primary">
                         <!-- HEADER -->
                         <div class="box-header with-border">
@@ -71,11 +71,9 @@
                                         <?php
                                             echo $this->Form->input("file",array('type'=>'file','class'=>'form-control','label'=>false,'autofocus'=>true,'required'=>'required'));
                                         ?>
-                                        <label><span style="color: red;">Format:</span> 1 - Item Name, 2 - Item Category Name, 3 - Item Sub Category Name, 4 - Short Description, 5 - Long Description, 6 - Keywords</label>
+                                        <label><span style="color: red;">Format:</span> A - Item Name, B - Item Category Name, C - Item Sub Category Name, D - Short Description, E - Long Description, F - Keywords</label>
                                     </div>
                                 </div>
-
-
                             </div>
                             <div class="box-footer">
                                 <?php
@@ -134,7 +132,12 @@
 
                                 <td><span><?php echo $i++; ?></span></td>
                                 <td>
-                                    <?=         $this->Html->image('/files/item/image_file/'.$data['Item']['image_dir']."/tm_".$data['Item']['image_file'],array('style'=>'height: 100px;width: 100px;'));?>
+                                    <?php if ($data['Item']['image_file'] != null || $data['Item']['image_dir'] != null): ?>
+                                        <?=         $this->Html->image('/files/item/image_file/'.$data['Item']['image_dir']."/tm_".$data['Item']['image_file'],array('style'=>'height: 100px;width: 100px;'));
+                                        ?>
+                                    <?php else: ?>
+                                        <?= $this->Html->image('no_img.jpg',array('style'=>'height: 100px;width: 100px;')); ?>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
                                     <?php echo $data['Item']['name']; ?>

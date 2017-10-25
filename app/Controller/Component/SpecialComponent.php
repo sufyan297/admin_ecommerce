@@ -40,5 +40,22 @@ class SpecialComponent extends Component {
        return $ordered;
    }
 
+   /**
+    *  Get Random String
+    *    DATE: 18th March 2017
+    *
+    * @param integer $length Length of Password
+    *
+    * @return string
+    * @author Mohammed Sufyan <mohammed.sufyan@actonate.com>
+    */
+    public static function generateString($length = 8)
+    {
+        $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+               ."abcdefghijklmnopqrstuvwxyz"
+               ."0123456789-";
+        $str = substr(str_shuffle($chars), 0, $length);
+        return $str;
+    }
 }
 ?>
