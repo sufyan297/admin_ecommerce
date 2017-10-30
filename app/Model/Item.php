@@ -3,7 +3,7 @@ App::uses('AppModel', 'Model');
 
 class Item extends Model
 {
-    var $belongsTo = ['ItemCategory'];
+    var $belongsTo = ['ItemCategory','ItemSubCategory'];
     var $hasMany = array('ChildItems'=> array('className' => 'Item', 'foreignKey'=>'item_id'),'ItemVariant','SellerItem');
 
     public $actsAs = array(
