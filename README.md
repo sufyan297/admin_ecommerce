@@ -1,5 +1,9 @@
 # Admin Panel for E-Commerce #
 
+# Tag: v0.0.7 (Date: 7th November 2017)
+- AllItems index func added.
+- Few bugs fixes.
+
 # Tag: v0.0.6 (Date: 25th October 2017)
 - Bulk Item upload added.
 - Few Minor Bug fixes.
