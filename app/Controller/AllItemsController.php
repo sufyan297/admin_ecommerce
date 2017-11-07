@@ -55,7 +55,7 @@ class AllItemsController extends AppController
                 $formatted_array_for_saveMany = $this->saveManyArray($all_item_data);
 
                 if ($this->AllItem->saveMany($formatted_array_for_saveMany)) {
-
+                    //successfully saved.
                 }
             }
 
@@ -92,6 +92,7 @@ class AllItemsController extends AppController
         foreach ($item_data as $key => $val) {
 
             $tmp = [];
+            $tmp_arr = [];
 
             $tmp['AllItem']['name'] = $val['Item']['name'];
             $tmp['AllItem']['item_id'] = $val['Item']['id']; //Child ItemID
@@ -109,9 +110,16 @@ class AllItemsController extends AppController
             $tmp['AllItem']['sellers'] = json_encode($val['SellerItem']);
 
             foreach ($val['ItemVariant'] as $key => $itm_var) {
-                $tmp['AllItem'][$itm_var['Variant']['url_slag']] = $itm_var['VariantProperty']['name'];
+                $tmp['AllItem'][$itm_var['Variant']['url_slag']] = $itm_var['VariantProperty']['url_slag'];
+
+                $tmp2 = [];
+                $tmp2['v_url_slag'] = $itm_var['Variant']['url_slag'];
+                $tmp2['vp_url_slag'] = $itm_var['VariantProperty']['url_slag'];
+
+                array_push($tmp_arr, $tmp2);
             }
 
+            $tmp['AllItem']['available_variants'] = json_encode($tmp_arr);
             $tmp['AllItem']['is_active'] = $val['Item']['is_active'];
             $tmp['AllItem']['del_flag'] = $val['Item']['del_flag'];
 
