@@ -199,7 +199,7 @@
                       <div class="row">
                           <div class="col-md-3">
                               <div class="form-group">
-                                  <?=  $this->Html->image('/files/item/image_file/'.$data['Item']['image_dir']."/sm_".$data['Item']['image_file']); ?>
+                                  <?=  $this->Html->image($IMAGE_BASE_URL.'item/image_file/'.$data['Item']['image_dir']."/sm_".$data['Item']['image_file']); ?>
                               </div>
                           </div>
                           <div class="col-md-3">

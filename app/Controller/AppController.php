@@ -42,7 +42,8 @@ class AppController extends Controller {
                      'password' => 'password'
                  )
              )
-         )
+         ),
+         'loginAction' => array('controller' => 'admins', 'action' => 'login')
       )
     );
 
@@ -67,8 +68,8 @@ class AppController extends Controller {
 
             exit(0);
         }
-
-
+        
+        $this->set('IMAGE_BASE_URL', 'http://krerum-prod.s3.amazonaws.com/files/');
         $this->Auth->allow("logout","login");
       }
 

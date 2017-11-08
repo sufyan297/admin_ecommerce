@@ -133,7 +133,7 @@
                                 <td><span><?php echo $i++; ?></span></td>
                                 <td>
                                     <?php if ($data['Item']['image_file'] != null || $data['Item']['image_dir'] != null): ?>
-                                        <?=         $this->Html->image('/files/item/image_file/'.$data['Item']['image_dir']."/tm_".$data['Item']['image_file'],array('style'=>'height: 100px;width: 100px;'));
+                                        <?=         $this->Html->image($IMAGE_BASE_URL.'item/image_file/'.$data['Item']['image_dir']."/tm_".$data['Item']['image_file']);
                                         ?>
                                     <?php else: ?>
                                         <?= $this->Html->image('no_img.jpg',array('style'=>'height: 100px;width: 100px;')); ?>

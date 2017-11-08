@@ -20,6 +20,10 @@
 App::uses('Folder', 'Utility');
 App::uses('UploadException', 'Upload.Lib/Error/Exception');
 App::uses('HttpSocket', 'Network/Http');
+
+use Aws\Credentials\Credentials;
+use Aws\S3\S3Client;
+
 class UploadBehavior extends ModelBehavior {
 
 	public $defaults = array(
@@ -48,6 +52,14 @@ class UploadBehavior extends ModelBehavior {
 		'saveDir' => true,
 		'deleteFolderOnDelete' => false,
 		'mode' => 0777,
+        'storagePath' => 'local',
+        'aws' => array(
+            'region' => 'ap-southeast-1',
+            'key' => 'ACCESS_KEY',
+            'secret' => 'SECRET',
+            'bucket' => 'BUCKET_NAME',
+            'prefix_path' => '/' //make sure to end path with dir seperator
+        )
 	);
 
 	protected $_imageMimetypes = array(
@@ -363,6 +375,15 @@ class UploadBehavior extends ModelBehavior {
 			));
 		}
 
+        //After Uploading to S3 Remove Local copy
+        if (isset($this->settings[$model->alias][$field]['aws']) &&
+            isset($this->settings[$model->alias][$field]['storagePath']) &&
+            $this->settings[$model->alias][$field]['storagePath'] == 's3') {
+                //finally delete folder
+                gc_collect_cycles(); //S3 Holds resources so we have to tell gc to release those resources so that we can remove it.
+                $this->recursive_rmdir($path);
+            }
+
 		if (empty($this->__filesToRemove[$model->alias])) {
 			return true;
 		}
@@ -384,6 +405,25 @@ class UploadBehavior extends ModelBehavior {
 	public function unlink($file) {
 		return unlink($file);
 	}
+
+    /**
+    *   Recursively remove everything from dir.
+    *
+    */
+    private function recursive_rmdir($dir) {
+      if( is_dir($dir) ) {
+        $objects = array_diff( scandir($dir), array('..', '.') );
+        foreach ($objects as $object) {
+          $objectPath = $dir."/".$object;
+          if( is_dir($objectPath) )
+            recursive_rmdir($objectPath);
+          else
+            unlink($objectPath);
+        }
+        rmdir($dir);
+      }
+    }
+
 
 	public function deleteFolder(Model $model, $path) {
 		if (!isset($this->__foldersToRemove[$model->alias])) {
@@ -1517,6 +1557,51 @@ class UploadBehavior extends ModelBehavior {
 		);
 	}
 
+
+
+    /**
+     * Connect to S3
+     *
+     * @return array
+     * @author Mohammed Sufyan <mohammed.sufyan@actonate.com>
+     */
+    private function _connect($aws = null)
+    {
+        return $client = S3Client::factory(
+            array(
+                'version' => 'latest',
+                'region' => $aws['region'],
+                'http' => [
+                    'verify' => false //allow http
+                ],
+                'credentials' => array(
+                    'key' => $aws['key'],
+                    'secret' => $aws['secret']
+                )
+            )
+        );
+    }
+
+    /**
+    *   Upload file to S3
+    *       DATE: 27th September 2017
+    *
+    * @return void
+    * @author Mohammed Sufyan <mohammed.sufyan@actonate.com>
+    */
+    public function upload($aws = [], $key = null, $source = null)
+    {
+        $resp = $this->_connect($aws)->putObject(array(
+            'Bucket' => $aws['bucket'],
+            'Key'    => $key,
+            'SourceFile' => $source,
+            'ACL' => 'public-read'
+        ));
+
+        return $resp;
+    }
+
+
 /**
  * Creates thumbnails for images
  *
@@ -1542,6 +1627,19 @@ class UploadBehavior extends ModelBehavior {
 				));
 				$this->_mkPath($model, $field, $thumbnailPathSized);
 
+                // pr($model);
+                // pr($size);
+                // pr($createThumbnails);
+                //
+                // pr($method);
+
+                // pr($field);
+                // pr($thumbnailPathSized);
+
+                // pr($thumbnailPath);
+
+
+                // pr($path);
 				$valid = false;
 				if (method_exists($model, $method)) {
 					$valid = $model->$method($model, $field, $path, $size, $geometry, $thumbnailPathSized);
@@ -1554,10 +1652,53 @@ class UploadBehavior extends ModelBehavior {
 					throw new Exception("Invalid thumbnailMethod %s", $method);
 				}
 
+                // pr($valid);
+
 				if (!$valid) {
 					$model->invalidate($field, 'resizeFail');
-				}
+				} else {
+                    if (
+                        isset($this->settings[$model->alias][$field]['aws']) &&
+                        isset($this->settings[$model->alias][$field]['storagePath']) &&
+                        $this->settings[$model->alias][$field]['storagePath'] == 's3'
+                    ) {
+                        //Resize Success
+                        $thumb_image_name = $size."_".$this->runtime[$model->alias][$field]['name'];
+                        //Upload to S3
+                        $path_to_file = $thumbnailPath.$thumb_image_name;
+                        if (isset($this->settings[$model->alias][$field]['aws']['prefix_path']) && $this->settings[$model->alias][$field]['aws']['prefix_path'] == '/') {
+                            $s3_file_path = Inflector::underscore($model->alias)."/".$field."/".$model->id."/".$thumb_image_name;
+                        } else if (!isset($this->settings[$model->alias][$field]['aws']['prefix_path'])) {
+                            $s3_file_path = Inflector::underscore($model->alias)."/".$field."/".$model->id."/".$thumb_image_name;
+                        } else {
+                            $s3_file_path = $this->settings[$model->alias][$field]['aws']['prefix_path'].Inflector::underscore($model->alias)."/".$field."/".$model->id."/".$thumb_image_name;
+                        }
+
+                        $this->upload($this->settings[$model->alias][$field]['aws'], $s3_file_path, $path_to_file);
+                    }
+                }
 			}
+
+
+
+            //=--==-=-
+            //if Original Image is true = Upload Original
+            if (isset($this->settings[$model->alias][$field]['aws']['original_upload']) &&
+                $this->settings[$model->alias][$field]['aws']['original_upload'] == true) {
+                //Resize Success
+                $thumb_image_name = $this->runtime[$model->alias][$field]['name'];
+
+                $path_to_file = $thumbnailPath.$thumb_image_name;
+                if (isset($this->settings[$model->alias][$field]['aws']['prefix_path']) && $this->settings[$model->alias][$field]['aws']['prefix_path'] == '/') {
+                    $s3_file_path = Inflector::underscore($model->alias)."/".$field."/".$model->id."/".$thumb_image_name;
+                } else if (!isset($this->settings[$model->alias][$field]['aws']['prefix_path'])) {
+                    $s3_file_path = Inflector::underscore($model->alias)."/".$field."/".$model->id."/".$thumb_image_name;
+                } else {
+                    $s3_file_path = $this->settings[$model->alias][$field]['aws']['prefix_path'].Inflector::underscore($model->alias)."/".$field."/".$model->id."/".$thumb_image_name;
+                }
+                $this->upload($this->settings[$model->alias][$field]['aws'], $s3_file_path, $path_to_file);
+            }
+
 		}
 	}
 

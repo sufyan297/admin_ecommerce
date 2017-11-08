@@ -49,6 +49,10 @@ Cache::config('default', array('engine' => 'File'));
  *     'Plugin'                    => array('/path/to/plugins/', '/next/path/to/plugins/'),
  * ));
  */
+ 
+ // Load Composer autoload.
+ require APP . 'Vendor/autoload.php';
+
 
 /**
  * Custom Inflector rules can be set to correctly pluralize or singularize table, model, controller names or whatever other
