@@ -3,7 +3,7 @@ App::uses('AppController', 'Controller');
 
 class VariantsController extends AppController
 {
-    public $components = array('Paginator');
+    public $components = array('Paginator','Special');
     public $uses = array('Variant','VariantProperty');
 
     public function beforeFilter()
@@ -32,6 +32,8 @@ class VariantsController extends AppController
         if($this->request->is('post'))
         {
             $data = $this->request->data;
+
+            $data['Variant']['url_slag'] = $this->Special->getUrlSlag($data['Variant']['name']);
 
             if ($this->Variant->save($data)) {
                 //Successfully added.
@@ -68,6 +70,8 @@ class VariantsController extends AppController
             $data = $this->request->data;
 
             $this->Variant->id = $id;
+            $data['Variant']['url_slag'] = $this->Special->getUrlSlag($data['Variant']['name']);
+
             if ($this->Variant->save($data)) {
                 //Successfully modified.
                 $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
@@ -156,6 +160,8 @@ class VariantsController extends AppController
         {
             $data = $this->request->data;
             $data['VariantProperty']['variant_id'] = $id;
+            $data['VariantProperty']['url_slag'] = $this->Special->getUrlSlag($data['VariantProperty']['name']);
+
             if ($this->VariantProperty->save($data)) {
                 //Successfully added.
                 $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
@@ -218,6 +224,8 @@ class VariantsController extends AppController
             $data = $this->request->data;
 
             $this->VariantProperty->id = $id;
+            $data['VariantProperty']['url_slag'] = $this->Special->getUrlSlag($data['VariantProperty']['name']);
+
             if ($this->VariantProperty->save($data)) {
                 //Successfully modified.
                 $this->Session->setFlash('<div class="alert alert-success alert-dismissable">

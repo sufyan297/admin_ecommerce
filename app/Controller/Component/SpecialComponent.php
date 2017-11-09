@@ -57,5 +57,23 @@ class SpecialComponent extends Component {
         $str = substr(str_shuffle($chars), 0, $length);
         return $str;
     }
+
+
+    /**
+    *   Make Url Slag
+    * @return url_slag
+    */
+    public function getUrlSlag($name = null)
+    {
+        $url_slag = null;
+        if ($name != null) {
+
+            $url_slag = str_replace(" ","_",strtolower(trim($name)));
+            $url_slag = str_replace("'","",$url_slag);
+            $url_slag = str_replace("/","_",$url_slag);
+            return $url_slag;
+        }
+        return false;
+    }
 }
 ?>
