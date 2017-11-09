@@ -376,7 +376,8 @@ class UploadBehavior extends ModelBehavior {
 		}
 
         //After Uploading to S3 Remove Local copy
-        if (isset($this->settings[$model->alias][$field]['aws']) &&
+        if (!empty($temp[$model->alias]) &&
+            isset($this->settings[$model->alias][$field]['aws']) &&
             isset($this->settings[$model->alias][$field]['storagePath']) &&
             $this->settings[$model->alias][$field]['storagePath'] == 's3') {
                 //finally delete folder
