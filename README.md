@@ -1,5 +1,10 @@
 # Admin Panel for E-Commerce #
 
+# Tag: v0.0.8 (Date: 9th November 2017)
+- S3 Support added for Images upload.
+- Critical bug fixed in Upload Plugin.
+- Composer added.
+
 # Tag: v0.0.7 (Date: 7th November 2017)
 - AllItems index func added.
 - Few bugs fixes.
