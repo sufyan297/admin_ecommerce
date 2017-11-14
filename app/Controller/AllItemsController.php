@@ -50,7 +50,7 @@ class AllItemsController extends AppController
             $chunk_item_ids = array_chunk($item_ids, 100);
             foreach ($chunk_item_ids as $key => $chunk_ids) {
                 $all_item_data = $this->getAllItemDetails($chunk_ids);
-
+                
                 // pr($all_item_data);die();
                 $formatted_array_for_saveMany = $this->saveManyArray($all_item_data);
 
@@ -106,6 +106,10 @@ class AllItemsController extends AppController
             $tmp['AllItem']['url_slag'] = $val['Item']['url_slag'];
             $tmp['AllItem']['item_category_id'] = $val['Item']['item_category_id'];
             $tmp['AllItem']['item_sub_category_id'] = $val['Item']['item_sub_category_id'];
+
+            $tmp['AllItem']['item_category_url_slag'] = $val['ItemCategory']['url_slag'];
+            $tmp['AllItem']['item_sub_category_url_slag'] = $val['ItemSubCategory']['url_slag'];
+            
 
             $tmp['AllItem']['sellers'] = json_encode($val['SellerItem']);
 
