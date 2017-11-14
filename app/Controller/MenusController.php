@@ -226,7 +226,10 @@ class MenusController extends AppController
 
         $this->Paginator->settings = array(
             'limit' => 10,
-            'order' => 'MenuItem.created DESC'
+            'order' => 'MenuItem.modified DESC',
+            'conditions' => [
+                'MenuItem.menu_id' => $menu_id
+            ]
         );
         $data = $this->Paginator->paginate('MenuItem');
 
