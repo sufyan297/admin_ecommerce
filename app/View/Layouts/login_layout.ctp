@@ -21,22 +21,30 @@
   <style>
     body {
         background-image: url('https://unsplash.it/1366/768/?random&blur');
-        background-repeat: no-repeat;
-        background-position: center;
+        position: absolute;
+        top:0;
+        bottom:0;
+        right:0;
+        left:0;
         background-size: cover;
-        /*width: 100%;*/
+        background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
         height: 100%;
     }
   </style>
 </head>
 <body class="hold-transition">
 <div class="login-box">
-    <div class="login-logo">
-        <!-- <span><i style="vertical-align: middle;" class="icon fa fa-newspaper-o"></i></span> -->
-      <a href="#" style="color: white;"><b>Krerum</b></a>
-    </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
+        <div class="login-logo">
+            <!-- <span><i style="vertical-align: middle;" class="icon fa fa-newspaper-o"></i></span> -->
+          <a href="#" style="color: #222;"><b>Krerum</b></a>
+        </div>
+        <hr />
         <p class="login-box-msg">Sign in to start your session</p>
         <?php echo $content_for_layout ?>
 

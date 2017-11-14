@@ -52,7 +52,8 @@
         //Controllers
         echo $this->Html->script('controllers/EditItemController');
         echo $this->Html->script('controllers/AddItemController');
-
+        echo $this->Html->script('controllers/ViewMenuController');
+        
     ?>
 <script>
     var baseUrl = "<?php echo $this->webroot; ?>";
@@ -327,6 +328,33 @@
                             <li><a href="<?php echo $this->Html->url(array('controller' => 'item_category', 'action' => 'view')); ?>"><i class="fa fa-circle-o"></i> View Categories</a></li>
                         </ul>
                     </li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+				<a href="#">
+                    <i class="fa fa-shopping-cart"></i> <span>Orders</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+					<li>
+						<a href="<?php echo $this->Html->url(array('controller' => 'orders', 'action' => 'index')); ?>"><i class="fa fa-circle-o"></i> Pending Dispatch</a>
+					</li>
+
+					<li>
+						<a href="<?php echo $this->Html->url(array('controller' => 'orders', 'action' => 'completed')); ?>"><i class="fa fa-circle-o"></i> Completed + Dispatched </a>
+					</li>
+
+					<li>
+						<a href="<?php echo $this->Html->url(array('controller' => 'orders', 'action' => 'incomplete')); ?>"><i class="fa fa-circle-o"></i> Payment Incomplete</a>
+					</li>
+
+					<li>
+						<a href="<?php echo $this->Html->url(array('controller' => 'orders', 'action' => 'cancel')); ?>"><i class="fa fa-circle-o"></i> Cancelled</a>
+					</li>
+
                 </ul>
             </li>
 
