@@ -1,5 +1,11 @@
 # Admin Panel for E-Commerce #
 
+# Tag: v0.0.9 (Date: 14th November 2017)
+- Menu CRUD added.
+- Menu Item CRUD added.
+- Few More Bugs fixes.
+- Menu can be prioritised.
+
 # Tag: v0.0.8 (Date: 9th November 2017)
 - S3 Support added for Images upload.
 - Critical bug fixed in Upload Plugin.
