@@ -371,6 +371,21 @@
                     <li><a href="<?php echo $this->Html->url(array('controller' => 'sellers', 'action' => 'view')); ?>"><i class="fa fa-circle-o"></i> View Sellers</a></li>
                 </ul>
             </li>
+
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-sitemap"></i> <span>Menu</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="<?php echo $this->Html->url(array('controller' => 'menus', 'action' => 'add')); ?>"><i class="fa fa-circle-o"></i> Add Menu</a></li>
+                    <li><a href="<?php echo $this->Html->url(array('controller' => 'menus', 'action' => 'view')); ?>"><i class="fa fa-circle-o"></i> View</a></li>
+                </ul>
+            </li>
+
             <!-- <li><a href="../../documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li> -->
             <!-- <li class="header">LABELS</li> -->
             <!-- <li><a href="#"><i class="fa fa-circle-o text-red"></i> <span>Important</span></a></li> -->
