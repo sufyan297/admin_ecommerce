@@ -350,7 +350,7 @@
                                             </select>
                                       </div>
                                   </div>
-                                  <div class="col-md-3">
+                                  <div class="col-md-2">
                                       <div class="form-group">
                                             <label for="inputSellerPrice">Seller Price<span style='color: red;'>*</span></label>
                                             <!-- New addition -->
@@ -358,21 +358,28 @@
                                             <!-- okao skdo -->
                                       </div>
                                   </div>
-                                  <div class="col-md-3">
+                                  <div class="col-md-2">
                                       <div class="form-group">
-                                            <label for="inputDiscountPrice">Seller Discount Price<span style='color: red;'>*</span></label>
+                                            <label for="inputDiscountPrice">Discount Price<span style='color: red;'>*</span></label>
                                             <!-- New addition -->
                                             <input id="inputDiscountPrice" type="text" ng-model="seller.discount_price" class="form-control" required/>
                                             <!-- okao skdo -->
                                       </div>
                                   </div>
-
-                                  <div class="col-md-2">
+                                  <div class="col-md-3">
+                                      <div class="form-group">
+                                            <label for="inputSKUCode">Seller SKU:<span style='color: red;'>*</span></label>
+                                            <!-- New addition -->
+                                            <input id="inputSKUCode" type="text" ng-model="seller.seller_sku_code" class="form-control" required/>
+                                            <!-- okao skdo -->
+                                      </div>
+                                  </div>
+                                  <div class="col-md-1">
                                       <div class="form-group">
                                           <!-- <br/> -->
                                           <label for="inputVariantName">&nbsp;</label>
                                           <button class="btn btn-danger btn-block" ng-click="removeSeller(var_idx, sub_var_idx)">
-                                              <i class="fa fa-times"></i> Remove
+                                              <i class="fa fa-times"></i> 
                                           </button>
                                       </div>
                                   </div>

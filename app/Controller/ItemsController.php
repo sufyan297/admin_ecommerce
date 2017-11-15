@@ -231,8 +231,11 @@ class ItemsController extends AppController
             $parent_item = $this->Item->findById($item_id);
 
             unset($parent_item['Item']['id']);
-            $parent_item['Item']['image_file'] = null;
-            $parent_item['Item']['image_dir'] = null;
+            unset($parent_item['Item']['image_file']);
+            unset($parent_item['Item']['image_dir']);
+
+            // $parent_item['Item']['image_file'] = null; //Legacy - After adding picture for Each Child
+            // $parent_item['Item']['image_dir'] = null; //Legacy - After adding picture for Each Child
 
             $child_item = $parent_item; //clone it
 
@@ -304,8 +307,9 @@ class ItemsController extends AppController
         return false;
     }
 
-    private function _addSellerItem($child_item_id = null, $seller_id = null, $price = 0.00, $discount_price = 0.00)
-    {
+    private function _addSellerItem($seller_item_id = null, $child_item_id = null, $seller_id = null, $price = 0.00, $discount_price = 0.00, 
+        $seller_sku_code = null
+        ) {
         if ($child_item_id != null && $seller_id != null) {
             $tmp = [];
 
@@ -313,7 +317,13 @@ class ItemsController extends AppController
             $tmp['SellerItem']['seller_id'] = $seller_id;
             $tmp['SellerItem']['price'] = $price;
             $tmp['SellerItem']['discount_price'] = $discount_price;
-            $this->SellerItem->create();
+            $tmp['SellerItem']['seller_sku_code'] = $seller_sku_code;
+
+            if ($seller_item_id == null) {
+                $this->SellerItem->create();
+            } else {
+                $this->SellerItem->id = $seller_item_id;
+            }
             if ($resp = $this->SellerItem->save($tmp)) {
                 return $resp;
             }
@@ -353,14 +363,14 @@ class ItemsController extends AppController
             //----------------------------------------------------------------------------
 
             //Save Item Price
-            $child_item = $this->_addItemChild($data['item_id'],$data['variant']['id'], $data['variant']['price'], $data['variant']['discount_price']);
+            $child_item = $this->_addItemChild($data['item_id'], $data['variant']['id'], $data['variant']['price'], $data['variant']['discount_price']);
             if ($child_item != false) {
                 //AddThisItemForLoggedInSeller
                 //For Now let's add for just single seller
-                $this->_removeExistingSellerItems($child_item['Item']['id']);
+                // $this->_removeExistingSellerItems($child_item['Item']['id']); //Legacy
 
                 foreach ($sorted_seller as $key => $val) {
-                    $this->_addSellerItem($child_item['Item']['id'], $val['id'], $val['price'], $val['discount_price']); //
+                    $this->_addSellerItem($val['seller_item_id'],$child_item['Item']['id'], $val['id'], $val['price'], $val['discount_price'], $val['seller_sku_code']); //
                 }
 
                 //-------------------
@@ -583,7 +593,9 @@ class ItemsController extends AppController
                     $tmp4['id'] = $val3['seller_id'];
                     $tmp4['price'] = $val3['price'];
                     $tmp4['discount_price'] = $val3['discount_price'];
-
+                    $tmp4['seller_item_id'] = $val3['id'];
+                    $tmp4['seller_sku_code'] = $val3['seller_sku_code'];
+                    
                     array_push($tmp['sellers'], $tmp4);
                 }
                 // $this->log("CHILD_ITEM");

@@ -100,7 +100,9 @@
                     {
                         id: null,
                         price: 0.00,
-                        discount_price: 0.00
+                        discount_price: 0.00,
+                        seller_item_id: null,
+                        seller_sku_code: null
                     }
                 ],
                 sub_variants: [
@@ -131,7 +133,9 @@
                         {
                             id: null,
                             price: 0.00,
-                            discount_price: 0.00
+                            discount_price: 0.00,
+                            seller_item_id: null,
+                            seller_sku_code: null
                         }
                     ],
                     sub_variants: [
@@ -174,7 +178,9 @@
                 {
                     id: null,
                     price: 0.00,
-                    discount_price: 0.00
+                    discount_price: 0.00,
+                    seller_item_id: null,
+                    seller_sku_code: null            
                 }
             );
         };
