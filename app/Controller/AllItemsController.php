@@ -98,6 +98,11 @@ class AllItemsController extends AppController
             $tmp['AllItem']['item_id'] = $val['Item']['id']; //Child ItemID
             $tmp['AllItem']['parent_item_id'] = $val['Item']['item_id']; //Parent ItemID
 
+            //ImageUri
+            $tmp['AllItem']['image_file'] = $val['Item']['image_file'];
+            $tmp['AllItem']['image_dir'] = $val['Item']['image_dir'];
+            
+
             $tmp['AllItem']['price'] = $val['SellerItem'][0]['price'];
             $tmp['AllItem']['discount_price'] = $val['SellerItem'][0]['discount_price'];
             $tmp['AllItem']['seller_id'] = $val['SellerItem'][0]['seller_id'];

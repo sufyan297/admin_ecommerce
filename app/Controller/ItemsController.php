@@ -197,6 +197,31 @@ class ItemsController extends AppController
             return $this->redirect($this->Auth->redirectUrl(array('controller'=>'items','action'=>'view')));
         }
     }
+
+    //=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+    public function editChildItem()
+    {
+        if ($this->request->is('post')) {
+            $data = $this->request->data;
+            $item_id = $data['Item']['item_id'];
+            unset($data['Item']['item_id']);
+
+            if ($this->Item->save($data)) {
+                $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                  <b>Item successfully modified.</b>
+                </div>');
+                return $this -> redirect(array('controller' => 'items', 'action' => 'edit', $item_id));
+            } else {
+                $this->Session->setFlash('<div class="alert alert-danger alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                  <b>Oops! Something went wrong. Please try again later.</b>
+                </div>');
+                return $this -> redirect(array('controller' => 'items', 'action' => 'edit', $item_id));
+            }
+        }
+    }
+
     //----------------------------------
     private function _addItemChild($item_id = null, $id = null, $price = null, $discount_price = null)
     {
@@ -485,6 +510,8 @@ class ItemsController extends AppController
                                 'ChildItems.id',
                                 'ChildItems.price',
                                 'ChildItems.discount_price',
+                                'ChildItems.image_file',
+                                'ChildItems.image_dir'
                             ],
                             'conditions' => [
                                 'ChildItems.del_flag !=' => 1
@@ -526,6 +553,9 @@ class ItemsController extends AppController
                 $tmp['id'] = $value['id'];
                 $tmp['price'] = $value['price'];
                 $tmp['discount_price'] = $value['discount_price'];
+                $tmp['image_file'] = $value['image_file'];
+                $tmp['image_dir'] = $value['image_dir'];
+                
 
                 $tmp['sub_variants'] = [];
                 $tmp['sellers'] = [];

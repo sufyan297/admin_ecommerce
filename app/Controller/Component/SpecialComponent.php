@@ -75,5 +75,16 @@ class SpecialComponent extends Component {
         }
         return false;
     }
+
+
+    /**
+     * Get Image Base Url
+     * 
+     * @return uri
+     */
+    public function getBaseImageUrl()
+    {
+        return "https://krerum-prod.s3.amazonaws.com/files/";
+    }
 }
 ?>

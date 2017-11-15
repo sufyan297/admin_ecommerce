@@ -406,6 +406,44 @@
                           </div>
                       </div>
                       <!-- Row Ends Here -->
+
+                      <!-- Child Primary Image -->
+                        <hr />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h4 class="box-title">Upload Primary Photo</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- form start -->
+                            <?php echo $this->Form->create('Item',array('url'=> array('controller' => 'items', 'action' => 'editChildItem'), 'class'=>'form-signin','type'=>'file','role'=>'form', 'multiple')); ?>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <img src="<?= $IMAGE_BASE_URL ?>item/image_file/{{var.image_dir}}/sm_{{var.image_file}}" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="inputPhoto">Photo: </label>                                
+                                    <input type="hidden" name="data[Item][id]" value="{{var.id}}" />
+                                    <input type="hidden" name="data[Item][item_id]" value="<?= $data['Item']['id'] ?>" />
+                                    <input type="file" name="data[Item][image_file]" id="inputPhoto" class="form-control" autofocus="autofocus">
+                                </div>
+
+                                <div class="form-group pull-right">
+                                    <?php
+			            				echo $this->Form->input('Change Picture',array('class'=>'btn btn-primary','type'=>'submit','label'=>false));
+            						?>
+                                </div>
+
+                            </div>
+
+                            
+                            <?php echo $this->Form->end(); ?>
+                        </div>
+                      <!-- #e43 343 434 -->
 	            	</div>
 	                <!-- /.box-body -->
 
