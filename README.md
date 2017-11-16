@@ -1,5 +1,13 @@
 # Admin Panel for E-Commerce #
 
+# Tag: v0.0.10 (Date: 16th November 2017)
+- Multi Photos Upload added for Child Item.
+- Critical bug fixed for upload plugin. (i.e afterDelete was not handled before.)
+- Primary Photo Upload for child Item.
+- SKU Code added for Child Item.
+- Many more bugs fixes.
+- New ItemCategoryUrlSlag and SubCategoryUrlSlag added in AllItems.
+
 # Tag: v0.0.9 (Date: 14th November 2017)
 - Menu CRUD added.
 - Menu Item CRUD added.
