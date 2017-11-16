@@ -369,6 +369,8 @@
                 <ul class="treeview-menu">
                     <li><a href="<?php echo $this->Html->url(array('controller' => 'sellers', 'action' => 'add')); ?>"><i class="fa fa-circle-o"></i> Add Seller</a></li>
                     <li><a href="<?php echo $this->Html->url(array('controller' => 'sellers', 'action' => 'view')); ?>"><i class="fa fa-circle-o"></i> View Sellers</a></li>
+                    <li><a href="<?php echo $this->Html->url(array('controller' => 'sellers', 'action' => 'request')); ?>"><i class="fa fa-circle-o"></i> View Requests</a></li>
+
                 </ul>
             </li>
 
