@@ -105,6 +105,7 @@
                         seller_sku_code: null
                     }
                 ],
+                item_photos: [],
                 sub_variants: [
                     {
                         variant_id: '',
@@ -138,6 +139,7 @@
                             seller_sku_code: null
                         }
                     ],
+                    item_photos: [],                
                     sub_variants: [
                         {
                             variant_id: '',
@@ -415,6 +417,76 @@
 
         };
 
+
+        //Save Priority For Item Photo
+        $scope.savePhotoPriority = function savePhotoPriority(photo)
+        {   
+            console.log("Photo: ", photo);
+            var photo_priority = document.getElementById('photo_priority_'+photo.id).value;
+            console.log("Photo Priority: ", photo_priority);
+
+            var req = {
+                method: 'POST',
+                url: baseUrl + 'items/savePhotoPriority',
+                data: {
+                    id: photo.id,
+                    priority: photo_priority
+                }
+            };
+
+            $http(req)
+            .then(function successCallback(resp) {
+                //Success
+                if(resp.data.status == 'success')
+                {
+                    console.log("SUCCESS",resp);
+                    growl.success(resp.data.message);
+                    
+                }
+                else {
+                    console.log("Failed!!",resp);
+                    // console.log(response);
+                    growl.error(resp.data.message);                    
+                }
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+        };
+
+
+        //Delete Item Photo By Id
+        $scope.deleteItemPhoto = function deleteItemPhoto(photo,var_idx, sub_photo_idx)
+        {   
+            console.log("Photo: ", photo);
+
+            if (confirm("Are you sure you want to delete this child item? \n This action won't be rollback.")) {      
+                var req = {
+                    method: 'POST',
+                    url: baseUrl + 'items/deleteItemPhoto',
+                    data: {
+                        id: photo.id
+                    }
+                };
+    
+                $http(req)
+                .then(function successCallback(resp) {
+                    //Success
+                    if(resp.data.status == 'success')
+                    {
+                        console.log("SUCCESS",resp);
+                        growl.success(resp.data.message);
+                        $scope.variants[var_idx].item_photos.splice(sub_photo_idx, 1);   
+                    }
+                    else {
+                        console.log("Failed!!",resp);
+                        // console.log(response);
+                        growl.error(resp.data.message);                    
+                    }
+                }, function errorCallback(response) {
+                    console.log(response);
+                });
+            }
+        };
         //------------------------------
         //get Variant
         function getChildItems()

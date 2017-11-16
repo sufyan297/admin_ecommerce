@@ -416,39 +416,96 @@
 
                       <!-- Child Primary Image -->
                         <hr />
+
                         <div class="row">
-                            <div class="col-md-12">
-                                <h4 class="box-title">Upload Primary Photo</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <!-- form start -->
-                            <?php echo $this->Form->create('Item',array('url'=> array('controller' => 'items', 'action' => 'editChildItem'), 'class'=>'form-signin','type'=>'file','role'=>'form', 'multiple')); ?>
 
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <img src="<?= $IMAGE_BASE_URL ?>item/image_file/{{var.image_dir}}/sm_{{var.image_file}}" />
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="inputPhoto">Photo: </label>                                
-                                    <input type="hidden" name="data[Item][id]" value="{{var.id}}" />
-                                    <input type="hidden" name="data[Item][item_id]" value="<?= $data['Item']['id'] ?>" />
-                                    <input type="file" name="data[Item][image_file]" id="inputPhoto" class="form-control" autofocus="autofocus">
+                              <div class="col-md-6">
+                              <div class="row">
+                                    <div class="col-md-12">
+                                        <h4 class="box-title">Upload Primary Photo</h4>
+                                    </div>
                                 </div>
 
-                                <div class="form-group pull-right">
-                                    <?php
-			            				echo $this->Form->input('Change Picture',array('class'=>'btn btn-primary','type'=>'submit','label'=>false));
-            						?>
-                                </div>
+                                    <!-- form start -->
+                                    <?php echo $this->Form->create('Item',array('url'=> array('controller' => 'items', 'action' => 'editChildItem'), 'class'=>'form-signin','type'=>'file','role'=>'form', 'multiple')); ?>
 
-                            </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <img src="<?= $IMAGE_BASE_URL ?>item/image_file/{{var.image_dir}}/sm_{{var.image_file}}" />
+                                        </div>
+                                    </div>
 
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="inputPhoto">Photo: </label>                                
+                                            <input type="hidden" name="data[Item][id]" value="{{var.id}}" />
+                                            <input type="hidden" name="data[Item][item_id]" value="<?= $data['Item']['id'] ?>" />
+                                            <input type="file" name="data[Item][image_file]" id="inputPhoto" class="form-control" autofocus="autofocus">
+                                        </div>
+
+                                        <div class="form-group pull-right">
+                                            <?php
+                                                echo $this->Form->input('Change Picture',array('class'=>'btn btn-primary','type'=>'submit','label'=>false));
+                                            ?>
+                                        </div>
+
+                                    </div>
+                                    <?php echo $this->Form->end(); ?>
+
+                              </div>
+
+                              <div class="col-md-6">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4 class="box-title">Upload Primary Photo</h4>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2" ng-repeat="photo in var.item_photos track by $index" ng-init="sub_photo_idx = $index">
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading">
+                                                <button class="btn btn-sm btn-danger" ng-click="deleteItemPhoto(photo,var_idx,sub_photo_idx)">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-success" ng-click="savePhotoPriority(photo)">
+                                                    <i class="fa fa-floppy-o"></i>
+                                                </button>
+                                            </div>
+                                            <div class="panel-body" style="display: flex; justify-content: center; align-items: center;">
+                                                <img src="<?= $IMAGE_BASE_URL ?>item_photo/image_file/{{photo.image_dir}}/sm_{{photo.image_file}}" style="width: 85px;" />
+                                            </div>
+                                            <div class="panel-footer">
+                                                <input id="photo_priority_{{photo.id}}" type="number" class="form-control" name="data[ItemPhoto][priority]" value="{{photo.priority}}" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- form start -->
+                                    <?php echo $this->Form->create('ItemPhoto',array('url'=> array('controller' => 'items', 'action' => 'multiPhotos'), 'class'=>'form-signin','type'=>'file','role'=>'form', 'multiple')); ?>
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <!-- <img src="<?= $IMAGE_BASE_URL ?>item_photo/image_file/{{var.image_dir}}/sm_{{var.image_file}}" /> -->
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="inputPhoto">Photo: </label>                                
+                                            <input type="hidden" name="data[ItemPhoto][item_id]" value="{{var.id}}" /> <!-- ChildITemID -->
+                                            <input type="hidden" name="data[ItemPhoto][id]" value="<?= $data['Item']['id'] ?>" />
+                                            <!-- <input type="file" name="data[ItemPhoto][image_file]" id="inputPhoto" class="form-control" autofocus="autofocus"> -->
+                                            <?php echo $this->Form->input("image_file",array('type'=>'file','class'=>'form-control','label'=>false,'autofocus'=>true)); ?>
+                                        </div>
+
+                                    <div class="form-group pull-right">
+                                        <?php
+                                            echo $this->Form->input('Upload',array('class'=>'btn btn-primary','type'=>'submit','label'=>false));
+                                        ?>
+                                    </div>
+                                    <?php echo $this->Form->end(); ?>
+                              </div>
                             
-                            <?php echo $this->Form->end(); ?>
+                            
                         </div>
                       <!-- #e43 343 434 -->
 	            	</div>

@@ -460,25 +460,60 @@ class UploadBehavior extends ModelBehavior {
 			'recursive' => -1,
 		));
 
-		foreach ($this->settings[$model->alias] as $field => $options) {
-			$this->_prepareFilesForDeletion($model, $field, $data, $options);
+		//getField (image_file)
+		$field = null;
+		foreach ($this->settings[$model->alias] as $key => $options) {
+			$field = $key;
+			break;
+		}
+					
+		if (isset($this->settings[$model->alias][$field]['aws']) &&
+		isset($this->settings[$model->alias][$field]['storagePath']) &&
+		$this->settings[$model->alias][$field]['storagePath'] == 's3') {
+			//Do Nothing Right Now. -= we will handle deletion from S3 Later.
+		} else {
+			//IF Storage Local selected.			
+			foreach ($this->settings[$model->alias] as $field => $options) {
+				$this->_prepareFilesForDeletion($model, $field, $data, $options);
+			}
 		}
 		return true;
 	}
 
 	public function afterDelete(Model $model) {
 		$result = array();
-		if (!empty($this->__filesToRemove[$model->alias])) {
-			foreach ($this->__filesToRemove[$model->alias] as $i => $file) {
-				$result[] = $this->unlink($file);
-				unset($this->__filesToRemove[$model->alias][$i]);
-			}
-		}
 
-		foreach ($this->settings[$model->alias] as $field => $options) {
-			if ($options['deleteFolderOnDelete'] == true) {
-				$this->deleteFolder($model, $options['path']);
-				return true;
+		//getField (image_file)
+		$field = null;
+		foreach ($this->settings[$model->alias] as $key => $options) {
+			$field = $key;
+			break;
+		}
+		
+		if (isset($this->settings[$model->alias][$field]['aws']) &&
+		isset($this->settings[$model->alias][$field]['storagePath']) &&
+		$this->settings[$model->alias][$field]['storagePath'] == 's3') {
+			//Do Nothing Right Now. -= we will handle deletion from S3 Later.
+			if (isset($this->__foldersToRemove[$model->alias])) {
+				//Folders TO Remove
+				// pr($this->__foldersToRemove[$model->alias]); die();
+			}
+	
+		} else {
+			//IF Storage Local selected.
+			if (!empty($this->__filesToRemove[$model->alias])) {
+				foreach ($this->__filesToRemove[$model->alias] as $i => $file) {
+					$result[] = $this->unlink($file);
+					unset($this->__filesToRemove[$model->alias][$i]);
+				}
+			}
+
+
+			foreach ($this->settings[$model->alias] as $field => $options) {
+				if ($options['deleteFolderOnDelete'] == true) {
+					$this->deleteFolder($model, $options['path']);
+					return true;
+				}
 			}
 		}
 		return $result;
@@ -1685,7 +1720,10 @@ class UploadBehavior extends ModelBehavior {
             //=--==-=-
             //if Original Image is true = Upload Original
             if (isset($this->settings[$model->alias][$field]['aws']['original_upload']) &&
-                $this->settings[$model->alias][$field]['aws']['original_upload'] == true) {
+				$this->settings[$model->alias][$field]['aws']['original_upload'] == true &&
+				isset($this->settings[$model->alias][$field]['aws']) &&
+				isset($this->settings[$model->alias][$field]['storagePath']) &&
+				$this->settings[$model->alias][$field]['storagePath'] == 's3') {
                 //Resize Success
                 $thumb_image_name = $this->runtime[$model->alias][$field]['name'];
 

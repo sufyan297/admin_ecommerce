@@ -1,10 +1,9 @@
 <?php
 App::uses('AppModel', 'Model');
 
-class Item extends Model
+class ItemPhoto extends Model
 {
-    var $belongsTo = ['ItemCategory','ItemSubCategory'];
-    var $hasMany = array('ChildItems'=> array('className' => 'Item', 'foreignKey'=>'item_id'),'ItemVariant','SellerItem','ItemPhoto');
+    // var $belongsTo = ['Item'];
 
     public $actsAs = array(
                 'Upload.Upload' => array(
@@ -12,7 +11,7 @@ class Item extends Model
                     'image_file' => array(
                     // Allowed mime types
                     'mimetypes'=> array('image/jpg','image/jpeg', 'image/png'),
-                    'storagePath' => 's3',
+                    'storagePath' => 's3', //local or s3
                     'aws' => [
                         'region' => 'ap-southeast-1',
                         'key' =>  'AKIAJ6D5EZV5AYI4MBFA',

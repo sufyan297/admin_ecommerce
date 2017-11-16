@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class ItemsController extends AppController
 {
     public $components = array('Paginator','Special');
-    public $uses = array('ItemCategory','Item','Variant','VariantProperty','ItemVariant','SellerItem','Seller','ItemSubCategory');
+    public $uses = array('ItemCategory','Item','Variant','VariantProperty','ItemVariant','SellerItem','Seller','ItemSubCategory','ItemPhoto');
 
     public function beforeFilter()
     {
@@ -220,6 +220,107 @@ class ItemsController extends AppController
                 return $this -> redirect(array('controller' => 'items', 'action' => 'edit', $item_id));
             }
         }
+    }
+
+
+    //-=======================================
+    // Upload Multiple Photos
+    public function multiPhotos()
+    {
+        if ($this->request->is('post')) {
+            $data = $this->request->data;
+            $item_id = $data['ItemPhoto']['id'];
+            // pr($data); die();
+            unset($data['ItemPhoto']['id']);
+            
+            if ($this->ItemPhoto->save($data)) {
+                $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                  <b>Item Photo successfully added.</b>
+                </div>');
+                return $this -> redirect(array('controller' => 'items', 'action' => 'edit', $item_id));
+            } else {
+                $this->Session->setFlash('<div class="alert alert-danger alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                  <b>Oops! Something went wrong. Please try again later.</b>
+                </div>');
+                return $this -> redirect(array('controller' => 'items', 'action' => 'edit', $item_id));
+            }
+            pr($data); die();
+        }
+    }
+
+    public function savePhotoPriority()
+    {
+        if ($this->request->is('post')) {
+
+            $data = $this->request->input('json_decode',true);
+            
+            $this->ItemPhoto->id = $data['id'];
+            $data['ItemPhoto']['priority'] = $data['priority'];
+
+            if ($this->ItemPhoto->save($data)) {
+
+                $res = new ResponseObject ( ) ;
+                $res -> status = 'success' ;
+                $res -> message = 'Photo Priority saved.' ;
+                $this -> response -> body ( json_encode ( $res ) ) ;
+                return $this -> response ;
+            } else {
+
+                $res = new ResponseObject ( ) ;
+                $res -> status = 'error' ;
+                $res -> message = 'Oops!! Something went wrong.' ;
+                $this -> response -> body ( json_encode ( $res ) ) ;
+                return $this -> response ;
+            }
+        }
+    }
+
+    //This is For Temp Purpose.
+    // public function deletePhoto($id = null)
+    // {
+        
+    //     if ($this->ItemPhoto->delete($id)) {
+            
+    //         $res = new ResponseObject ( ) ;
+    //         $res -> status = 'success' ;
+    //         $res -> message = 'Photo successfully removed.' ;
+    //         $this -> response -> body ( json_encode ( $res ) ) ;
+    //         return $this -> response ;
+    //     } else {
+
+    //         $res = new ResponseObject ( ) ;
+    //         $res -> status = 'error' ;
+    //         $res -> message = 'Oops!! Something went wrong.' ;
+    //         $this -> response -> body ( json_encode ( $res ) ) ;
+    //         return $this -> response ;
+    //     }                
+    // }
+    //=-=-=-=-=-=-=-=-=-=-=-
+
+    public function deleteItemPhoto()
+    {
+        if ($this->request->is('post')) {
+            $data = $this->request->input('json_decode',true);
+            
+
+            if ($this->ItemPhoto->delete($data['id'])) {
+                
+                $res = new ResponseObject ( ) ;
+                $res -> status = 'success' ;
+                $res -> message = 'Photo successfully removed.' ;
+                $this -> response -> body ( json_encode ( $res ) ) ;
+                return $this -> response ;
+            } else {
+
+                $res = new ResponseObject ( ) ;
+                $res -> status = 'error' ;
+                $res -> message = 'Oops!! Something went wrong.' ;
+                $this -> response -> body ( json_encode ( $res ) ) ;
+                return $this -> response ;
+            }                
+        }            
     }
 
     //----------------------------------
@@ -529,6 +630,7 @@ class ItemsController extends AppController
                         ],
                         'ChildItems.ItemVariant',
                         'ChildItems.SellerItem',
+                        'ChildItems.ItemPhoto',
                         // 'ChildItems.ItemVariant.Variant' => [
                         //     'fields' => [
                         //         'Variant.id',
@@ -569,7 +671,8 @@ class ItemsController extends AppController
 
                 $tmp['sub_variants'] = [];
                 $tmp['sellers'] = [];
-
+                $tmp['item_photos'] = [];
+                
                 foreach ($value['ItemVariant'] as $key => $val2) {
                     $tmp2 = [];
                     $tmp2['variant_id'] = $val2['variant_id'];
@@ -597,6 +700,18 @@ class ItemsController extends AppController
                     $tmp4['seller_sku_code'] = $val3['seller_sku_code'];
                     
                     array_push($tmp['sellers'], $tmp4);
+                }
+
+                //ItemPhotos
+                foreach ($value['ItemPhoto'] as $key4 => $val4) {
+                    $tmp5 = [];
+
+                    $tmp5['id'] = $val4['id'];
+                    $tmp5['image_file'] = $val4['image_file'];
+                    $tmp5['image_dir'] = $val4['image_dir'];
+                    $tmp5['priority'] = $val4['priority'];
+
+                    array_push($tmp['item_photos'], $tmp5);
                 }
                 // $this->log("CHILD_ITEM");
                 // $this->log($tmp);
