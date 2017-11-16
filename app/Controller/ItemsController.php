@@ -340,6 +340,7 @@ class ItemsController extends AppController
             unset($parent_item['Item']['id']);
             unset($parent_item['Item']['image_file']);
             unset($parent_item['Item']['image_dir']);
+            unset($parent_item['Item']['kv_description']); //do not copy KV Description for Child Items.
 
             // $parent_item['Item']['image_file'] = null; //Legacy - After adding picture for Each Child
             // $parent_item['Item']['image_dir'] = null; //Legacy - After adding picture for Each Child
@@ -935,7 +936,7 @@ class ItemsController extends AppController
         if ($this->request->is('post')) {
             
             $data = $this->request->input('json_decode',true);
-            
+
             $tmp = [];
             $this->Item->id = $data['item_id'];
             $tmp['Item']['kv_description'] = json_encode($data['kv_description']);

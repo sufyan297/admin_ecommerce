@@ -45,7 +45,7 @@
         echo $this->Html->script('bootstrap-datepicker.min');
         echo $this->Html->script('my_func');
 
-
+   
         //Base App
         echo $this->Html->script('app');
 
@@ -55,6 +55,10 @@
         echo $this->Html->script('controllers/ViewMenuController');
 
     ?>
+    
+    <!-- CKEDITOR -->
+    <script src="//cdn.ckeditor.com/4.7.3/standard/ckeditor.js"></script>
+        
 <script>
     var baseUrl = "<?php echo $this->webroot; ?>";
 
