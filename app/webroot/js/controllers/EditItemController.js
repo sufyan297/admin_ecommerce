@@ -530,6 +530,134 @@
         $scope.getVariants();
         $scope.getSellers();
         getChildItems();
+
+
+
+
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+        //  Item Specifications (Key - Value Pair)
+        //  @author Mohammed Sufyan Shaikh
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+        $scope.item_desc = {
+            heading: 'Specifications:',
+            sub_heading: '',
+            body: [
+                {
+                    title: 'General Details:',
+                    sub_title: '',
+                    contents: [
+                        {
+                            key: 'Some Key',
+                            value: 'Some value'
+                        }
+                    ]
+                }
+            ]
+        };
+
+        
+        $scope.input_show_kv_panel = document.getElementById('inputKeyValuePair').value;
+        console.log("InputKeyVal: ", $scope.input_show_kv_panel);
+        if ($scope.input_show_kv_panel == 1) {
+            $scope.input_show_kv_panel = true;
+        } else {
+            $scope.input_show_kv_panel = false;            
+        }
+
+        $scope.item_desc = JSON.parse(document.getElementById('kv_description_json').innerHTML);
+        //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+        $scope.addDetailsGroup = function addDetailsGroup()
+        {
+            $scope.item_desc.body.push(
+                {
+                    title: '',
+                    sub_title: '',
+                    contents: [
+                        {
+                            key: '',
+                            value: ''
+                        }
+                    ]                
+                }
+            );
+
+        };
+
+        $scope.removeDetailsGroup = function removeDetailsGroup(body_idx)
+        {
+            $scope.item_desc.body.splice(body_idx, 1);   
+            
+        };
+
+        $scope.addDescriptionPair = function addDescriptionPair(body_idx)
+        {
+            console.log("addDescriptionPair() Body Idx:", body_idx);
+
+            $scope.item_desc.body[body_idx].contents.push(
+                {
+                    key: '',
+                    value: ''
+                }
+            );
+        };
+
+        $scope.removeDescriptionPair = function removeDescriptionPair(body_idx, content_idx)
+        {
+            $scope.item_desc.body[body_idx].contents.splice(content_idx, 1);   
+        };
+
+
+        $scope.editDescription = function editDescription(_item_id)
+        {
+            console.log("ItemID:", _item_id);
+            var req = {
+                method: 'POST',
+                url: baseUrl + 'items/editItemDescription',
+                data: {
+                    kv_description: $scope.item_desc,
+                    item_id: _item_id
+                }
+            };
+
+            $http(req)
+            .then(function successCallback(resp) {
+                //Success
+                if(resp.data.status == 'success')
+                {
+                    // console.log("[editDescription] SUCCESS" ,resp.data);
+                    growl.success(resp.data.message);
+                }
+                else {
+                    console.log("Failed!!");
+                    // console.log(response);
+                    growl.error(resp.data.message);
+                }
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+
+        };
+
+
+
+        //Toggle KV Panel
+        $scope.toggleKVPanel = function toggleKVPanel()
+        {
+            console.log("InPut: ", $scope.input_show_kv_panel);
+            //First get whether it is checked or not.
+            if ($scope.input_show_kv_panel === true) {
+                $scope.show_kv_panel = true;
+            } else {
+                $scope.show_kv_panel = false;                
+            }
+        };
+
+        
+
+        //CallBacks()
+        $scope.toggleKVPanel();
+        
     }]);
 
 })();

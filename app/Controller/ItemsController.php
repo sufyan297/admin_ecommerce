@@ -109,6 +109,12 @@ class ItemsController extends AppController
         //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--==-=-
         if ($this->request->is('post')) {
             $data = $this->request->data;
+
+            if (isset($data['Item']['show_description']) && $data['Item']['show_description'] == true) {
+                $data['Item']['show_description'] = 1;                
+            } else {
+                $data['Item']['show_description'] = 0;
+            }
             $this->Item->id = $id;
             if (empty($data['Item']['item_sub_category_id']) || $data['Item']['item_sub_category_id'] == 'undefined') {
                 $data['Item']['item_sub_category_id'] = null;
@@ -917,5 +923,38 @@ class ItemsController extends AppController
         }
         return false;
     }
+
+
+    /**
+     *  Other Details
+     * 
+     * @return json
+     */
+    public function editItemDescription()
+    {
+        if ($this->request->is('post')) {
+            
+            $data = $this->request->input('json_decode',true);
+            
+            $tmp = [];
+            $this->Item->id = $data['item_id'];
+            $tmp['Item']['kv_description'] = json_encode($data['kv_description']);
+
+            if ($this->Item->save($tmp)) {
+                $res = new ResponseObject ( ) ;
+                $res -> status = 'success' ;
+                $res -> message = 'Key/Value Description successfully updated.' ;
+                $this -> response -> body ( json_encode ( $res ) ) ;
+                return $this -> response ;
+            } else {
+                $res = new ResponseObject ( ) ;
+                $res -> status = 'success' ;
+                $res -> message = 'Oops!! Something went wrong. Please try again later.' ;
+                $this -> response -> body ( json_encode ( $res ) ) ;
+                return $this -> response ;
+            }
+        }            
+    }
+    
 }
 ?>

@@ -1,5 +1,9 @@
 # Admin Panel for E-Commerce #
 
+# Tag: v0.0.11 (Date: 16th November 2017)
+- Key/Value Pair Description supported.
+- Few Minor issue fixes.
+
 # Tag: v0.0.10 (Date: 16th November 2017)
 - Multi Photos Upload added for Child Item.
 - Critical bug fixed for upload plugin. (i.e afterDelete was not handled before.)

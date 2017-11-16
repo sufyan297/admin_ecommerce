@@ -167,6 +167,35 @@
                           </div>
                       </div>
                       <!-- Ends Here -->
+
+
+                        <!-- Row -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+
+                                <label for="inputKeyVal">
+                                    <?= $this -> Form -> checkbox('show_description', array(
+                                        'id' => 'inputKeyVal',
+                                        'hiddenField' => false,
+                                        'checked'=>$data['Item']['show_description'],
+                                        'ng-model' => 'input_show_kv_panel',
+                                        'ng-change' => 'toggleKVPanel()'
+                                        )
+                                    ); ?> Show Key/Value Pair description
+                                </label>
+                                <input id="inputKeyValuePair" type="hidden" value="<?= $data['Item']['show_description']?>" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ends Here -->
+
+
 	            	</div>
 	              <!-- /.box-body -->
                   <div class="box-footer">
@@ -230,6 +259,134 @@
         <input id="data_item_id" type="hidden" value="<?= $data['Item']['id'] ?>" />
         <input type="hidden" ng-model="item_id"/>
     <!-- Hidden Fields Over Here -->
+
+    <!-- Item Specification -->
+
+    <textarea id="kv_description_json" style="display: none;"><?= $data['Item']['kv_description'] ?></textarea>
+
+    <div class="row" ng-show="show_kv_panel">
+		<div class="col-md-12">
+			<div class="box box-primary">
+				<div class="box-header with-border">
+	                <h3 class="box-title">Other details: </h3>
+
+		            <div class="box-tools pull-right">
+		                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+		                </button>
+		                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+		            </div>
+	            </div>
+	            <!-- /.box-header -->
+                <div class="box-body">
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="inputHeading">Heading</label>
+                                <input id="inputHeading" type="text" ng-model="item_desc.heading" placeholder="Enter heading..." class="form-control"/>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="inputSubHeading">Sub Heading</label>
+                                <input id="inputSubHeading" type="text" ng-model="item_desc.sub_heading" placeholder="Enter Sub heading..." class="form-control"/>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <button class="btn btn-info btn-block" ng-click="addDetailsGroup()">
+                                <i class="fa fa-plus"></i> Add Details Group
+                            </button>
+                        </div>
+                    </div>
+                    <hr/>
+                    <div class="row">
+                        
+                        <div class="col-md-6" ng-repeat="desc in item_desc.body track by $index" ng-init="body_idx = $index">
+                            <div class="panel panel-default">
+
+                                <div class="panel-heading">
+                                    <span ng-bind="desc.title"></span>
+
+                                    <button class="btn btn-sm btn-danger pull-right" style="display:flex;" ng-click="removeDetailsGroup(body_idx)">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>
+
+                                <div class="panel-body">
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="inputTitle">Title</label>
+                                                <input id="inputTitle" type="text" ng-model="desc.title" placeholder="Enter title..." class="form-control"/>
+                                            </div> 
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="inputSubTitle">Sub Title</label>
+                                                <input id="inputSubTitle" type="text" ng-model="desc.sub_title" placeholder="Enter Sub title..." class="form-control"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="row" ng-repeat="content in desc.contents track by $index" ng-init="content_idx = $index">
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label for="inputKey">Key:</label>
+                                                <input id="inputKey" type="text" ng-model="content.key" placeholder="Enter Key.." class="form-control"/>
+                                            </div> 
+        
+                                        </div>
+                                        <div class="col-md-5">
+                                            <div class="form-group">
+                                                <label for="inputValue">Value:</label>
+                                                <input id="inputValue" type="text" ng-model="content.value" placeholder="Enter Value..." class="form-control"/>
+                                            </div> 
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label for="inputValue">&nbsp;</label>
+                                                <button class="btn btn-danger btn-block" ng-click="removeDescriptionPair(body_idx, content_idx)">
+                                                        <i class="fa fa-times"></i> Remove
+                                                </button>
+                                            </div>                                             
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <button class="btn btn-success btn-block" ng-click="addDescriptionPair(body_idx)">
+                                                <i class="fa fa-plus"></i> Add Pair
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="box-footer">
+                    <div class="row">
+                        <div class="col-md-3 pull-right">
+                            
+                            <button class="btn btn-warning btn-block" ng-click="editDescription('<?= $data['Item']['id'] ?>')">
+                                <i class="fa fa-pencil"></i> Edit details
+                            </button>
+
+                        </div>    
+                    </div>    
+                </div>
+
+	        </div>
+		</div>
+	</div>
+
+
+    <!-- 0-0-0-0-0-0-0-0-0-0-0-0-0-0- -->
+
 
     <div class="row">
         <div class="col-md-12">
