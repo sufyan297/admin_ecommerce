@@ -115,4 +115,7 @@
         </div>
     </div>
 
+<script>
+    CKEDITOR.replace( 'data[Content][description]' );
+</script>
 <?php $this->end('main-content'); ?>
