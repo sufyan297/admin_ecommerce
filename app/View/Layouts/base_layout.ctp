@@ -53,7 +53,7 @@
         echo $this->Html->script('controllers/EditItemController');
         echo $this->Html->script('controllers/AddItemController');
         echo $this->Html->script('controllers/ViewMenuController');
-        
+
     ?>
 <script>
     var baseUrl = "<?php echo $this->webroot; ?>";
@@ -394,7 +394,11 @@
                   </span>
               </a>
               <ul class="treeview-menu">
-                  <li><a href="<?php echo $this->Html->url(array('controller' => 'contents', 'action' => 'change_content','terms_condition')); ?>"><i class="fa fa-circle-o"></i> Terms and Conditions </a></li>
+                <?php foreach ($contents as $key => $value): ?>
+
+                  <li><a href="<?php echo $this->Html->url(array('controller' => 'contents', 'action' => 'change_content',$value['Content']['alias'])); ?>">
+                    <i class="fa fa-circle-o"></i> <?= $value['Content']['title']?> </a></li>
+                <?php endforeach; ?>
               </ul>
             </li>
             <!-- <li><a href="../../documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li> -->

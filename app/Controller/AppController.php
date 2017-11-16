@@ -31,6 +31,9 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
+
+    public $uses = array('Content');
+
     public $components = array(
      'Flash','Session',
      'Auth' => array(
@@ -68,9 +71,15 @@ class AppController extends Controller {
 
             exit(0);
         }
-        
+
         $this->set('IMAGE_BASE_URL', 'http://krerum-prod.s3.amazonaws.com/files/');
         $this->Auth->allow("logout","login");
+
+
+
+        $contents = $this->Content->find('all',['fields'=>['title','alias']]);
+        $this->set('contents',$contents);
+        // pr($contents);die();
       }
 
     public function getAdmin()

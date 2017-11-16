@@ -27,6 +27,14 @@
                     <?php
                     // $img_path = $this->webroot.DS.'files'.DS.'content'.DS.'image_file'.DS.$content['Content']['image_dir'].DS.'api_'.$content['Content']['image_file'];
                     ?>
+                    <?php echo $this->Form->input('id',array(
+                      'class'=>"form-control",
+                      'type'=>'hidden',
+                      'label'=>false,
+                      'value' => $content['Content']['id'] ,
+                      'autofocus' => 'autofocus'
+                    ));
+                    ?>
                     <div class="form-group">
                         <?=  $this->Html->image($IMAGE_BASE_URL.'content/image_file/'.$content['Content']['image_dir']."/sm_".$content['Content']['image_file']); ?>
 
