@@ -35,7 +35,8 @@
       			              <tr>
                                 <th>#</th>
                                 <th>Name</th>
-                                <th>Description</th>
+                                <th>Product Category</th>
+                                <th>Payment</th>
                                 <th>Edit</th>
                                 <th>Delete</th>
       			              </tr>
@@ -48,13 +49,37 @@
                                 <td><span><?= $data['Seller']['seller_no'] ?></span></td>
 
                                 <td>
-                                    <?= $data['Seller']['name']; ?>
+                                  <b><?= $data['Seller']['name'] ?></b>
+                                  <ul>
+                                    <li><b>Address:  </b><?= $data['Seller']['address']; ?></li>
+                                    <li><b>Contact No 1: </b><?= $data['Seller']['mobile']; ?></li>
+                                    <li><b>Contact No 2: </b><?= $data['Seller']['mobile_2']; ?></li>
+                                    <li><b>PAN NO: </b><?= $data['Seller']['PAN']; ?></li>
+                                    <li><b>BANK Account NO: </b><?= $data['Seller']['bank_account_no']; ?></li>
+                                    <li><b>IFSC Code: </b><?= $data['Seller']['bank_IFSC']; ?></li>
+                                    <li><b>Branch: </b><?= $data['Seller']['branch']; ?></li>
+                                    <li></li>
+
+                                  </ul>
                                 </td>
 
                                 <td>
-                                    <?= $data['Seller']['description']; ?>
+
+                                    <?= $data['Seller']['product_category']; ?>
+
+
                                 </td>
 
+                                <td>
+                                  <ul>
+                                    <li><b>Payment Terms:</b><br><?= $data['Seller']['payment_terms']; ?></li>
+                                    <li><b>Credit in day:</b><br><?= $data['Seller']['credit_period']; ?></li>
+                                    <li><b>Return Policy Payment:</b><br><?= $data['Seller']['return_policy_payment']; ?></li>
+                                    <li><b>Remark:</b><br><?= $data['Seller']['remarks']; ?></li>
+
+
+                                  </ul>
+                                </td>
                                 <td>
                                     <?php
                                     echo $this->Html->link($this->Html->tag('i', '',array('class' => 'fa fa-pencil')),array('controller'=>'sellers','action'=>'edit/'.$data['Seller']['id']),array('class'=>'btn btn-warning btn-circle', 'escape' => false));
