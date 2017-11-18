@@ -33,21 +33,16 @@
                       <table class="table table-striped table-bordered table-hover" id="dataTables">
       	            		<thead>
       			              <tr>
-                                <th>#</th>
-                                <th>Name</th>
+                                <th>Personal Info</th>
                                 <th>Product Category</th>
-                                <th>Payment</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
+                                <th>Payment Info </th>
+                                <th>Action</th>
       			              </tr>
       			            </thead>
                         <tbody class="tbody">
                           <?php foreach ($sellers as $data): ?>
 
                             <tr style="cursor: pointer;">
-
-                                <td><span><?= $data['Seller']['seller_no'] ?></span></td>
-
                                 <td>
                                   <b><?= $data['Seller']['name'] ?></b>
                                   <ul>
@@ -80,15 +75,13 @@
 
                                   </ul>
                                 </td>
-                                <td>
-                                    <?php
-                                    echo $this->Html->link($this->Html->tag('i', '',array('class' => 'fa fa-pencil')),array('controller'=>'sellers','action'=>'edit/'.$data['Seller']['id']),array('class'=>'btn btn-warning btn-circle', 'escape' => false));
-                                    ?>
-                                </td>
 
                                 <td>
+                                  <?php
+                                  echo $this->Html->link($this->Html->tag('i', ' Accept',array('class' => 'fa fa-check')),array('controller'=>'sellers','action'=>'accept/'.$data['Seller']['id']),array('class'=>'btn btn-warning btn-circle', 'escape' => false));
+                                  ?><br><br>
                                     <?php
-                                        echo $this->Html->link($this->Html->tag('i', '',array('class' => 'fa fa-times')),array('controller'=>'sellers','action'=>'delete/'.$data['Seller']['id']),array('class'=>'btn btn-danger btn-circle', 'escape' => false,'onclick'=>'return confirm(\'Are you sure? This action wont be rollback.\')'));
+                                        echo $this->Html->link($this->Html->tag('i', ' Cancel',array('class' => 'fa fa-times')),array('controller'=>'sellers','action'=>'ignore/'.$data['Seller']['id']),array('class'=>'btn btn-danger btn-circle', 'escape' => false,'onclick'=>'return confirm(\'Are you sure? This action wont be rollback.\')'));
                                     ?>
                                 </td>
 

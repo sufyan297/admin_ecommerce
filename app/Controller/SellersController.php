@@ -88,7 +88,66 @@ class SellersController extends AppController
 
     }
 
+    /**
+    *   Accept Seller
+    *
+    * @return void
+    */
+    public function accept($id = null)
+    {
 
+        $data['Seller']['id'] = $id;
+        $data['Seller']['request_accept'] = 1;
+        $data['Seller']['is_active'] = 1;
+
+        if ($this->Seller->save($data)) {
+            //Successfully modified.
+            $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
+                                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <b>Seller successfully Added.</b>
+                                      </div>');
+            return $this -> redirect(array('controller' => 'sellers', 'action' => 'request'));
+        } else {
+            //Failed to add
+            $this->Session->setFlash('<div class="alert alert-danger alert-dismissable">
+                                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <b>Oops! Something went wrong. Please try again later.</b>
+                                      </div>');
+            return $this -> redirect(array('controller' => 'sellers', 'action' => 'request'));
+        }
+        return $this -> redirect(array('controller' => 'sellers', 'action' => 'request'));
+    }
+
+    /**
+    *   Accept Seller
+    *
+    * @return void
+    */
+    public function ignore($id = null)
+    {
+        $data['Seller']['id'] = $id;
+        $data['Seller']['request_accept'] = 0;
+        $data['Seller']['del_flag'] = 1;
+        $data['Seller']['is_active'] = 0;
+
+
+        if ($this->Seller->save($data)) {
+            //Successfully modified.
+            $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
+                                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <b>Seller Deleted.</b>
+                                      </div>');
+            return $this -> redirect(array('controller' => 'sellers', 'action' => 'request'));
+        } else {
+            //Failed to add
+            $this->Session->setFlash('<div class="alert alert-danger alert-dismissable">
+                                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                        <b>Oops! Something went wrong. Please try again later.</b>
+                                      </div>');
+            return $this -> redirect(array('controller' => 'sellers', 'action' => 'request'));
+        }
+        return $this -> redirect(array('controller' => 'sellers', 'action' => 'request'));
+    }
     /**
     *   View Seller
     *
@@ -111,6 +170,28 @@ class SellersController extends AppController
         $this->set('sellers', $data);
     }
 
+    /**
+    *   View New Seller Request
+    *
+    * @return void
+    */
+    public function request()
+    {
+        $this->layout = 'base_layout';
+        $this -> set('page_title', 'View Sellers');
+
+        $this->Paginator->settings = array(
+            'limit' => 10,
+            'order' => 'Seller.created DESC',
+            'conditions' => [
+                'Seller.request_accept' => 0,
+                'Seller.del_flag' => 0,
+
+            ]
+        );
+        $data = $this->Paginator->paginate('Seller');
+        $this->set('sellers', $data);
+    }
     /**
     *   Delete Seller
     *

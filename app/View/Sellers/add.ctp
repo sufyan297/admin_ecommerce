@@ -10,7 +10,7 @@
 	?>
 
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-12">
 			<div class="box box-primary">
 				<div class="box-header with-border">
 	            <h3 class="box-title">Add Seller</h3>
@@ -33,7 +33,7 @@
   						// echo $this->Session->flash('auth');
   						echo $this->Session->flash();
   					?>
-						<div class="form-group">
+						<div class="form-group col-md-12">
 						  <label for="inputName">Name<span style='color: red;'>*</span></label>
 						  <?php echo $this->Form->input('name',array(
                             'id' => 'inputName',
@@ -45,17 +45,132 @@
 						  ));
 						  ?>
 						</div>
-						<div class="form-group">
-						  <label for="inputDescription">Description<span style='color: red;'>*</span></label>
-						  <?php echo $this->Form->textarea('description',array(
-                            'id' => 'inputDescription',
+            <div class="form-group col-md-12">
+						  <label >Address<span style='color: red;'>*</span></label>
+						  <?php echo $this->Form->input('address',array(
 							'class'=>"form-control",
-							'placeholder'=>'Description',
 							'label'=>false,
-							'required' => 'required',
+              'required' => 'required'
+
+
 						  ));
 						  ?>
 						</div>
+
+            <div class="form-group col-md-6">
+						  <label >Contact Number<span style='color: red;'>*</span></label>
+						  <?php echo $this->Form->input('mobile',array(
+							'class'=>"form-control",
+							'label'=>false,
+              'required' => 'required',
+
+
+						  ));
+						  ?>
+						</div>
+
+            <div class="form-group col-md-6">
+						  <label >Alternate Contact Number</label>
+						  <?php echo $this->Form->input('mobile_2',array(
+							'class'=>"form-control",
+							'label'=>false
+
+						  ));
+						  ?>
+						</div>
+            <div class="form-group col-md-6">
+						  <label >PAN Card Number</label>
+						  <?php echo $this->Form->input('PAN',array(
+							'class'=>"form-control",
+							'label'=>false
+
+						  ));
+						  ?>
+						</div>
+            <div class="form-group col-md-6">
+						  <label >Bank Account Number</label>
+						  <?php echo $this->Form->input('bank_account_no',array(
+							'class'=>"form-control",
+							'label'=>false
+
+						  ));
+						  ?>
+						</div>
+            <div class="form-group col-md-6">
+						  <label >IFSC Code</label>
+						  <?php echo $this->Form->input('bank_IFSC',array(
+							'class'=>"form-control",
+							'label'=>false
+
+						  ));
+						  ?>
+						</div>
+            <div class="form-group col-md-6">
+						  <label >Branch</label>
+						  <?php echo $this->Form->input('branch',array(
+							'class'=>"form-control",
+							'label'=>false
+
+						  ));
+						  ?>
+						</div>
+            <div class="form-group col-md-12">
+						  <label >Product Category</label>
+						  <?php echo $this->Form->input('product_category',array(
+							'class'=>"form-control",
+							'label'=>false
+
+						  ));
+						  ?>
+						</div>
+            <div class="form-group col-md-6">
+						  <label >Payment Terms</label>
+						  <?php echo $this->Form->input('payment_terms',array(
+							'class'=>"form-control",
+							'label'=>false
+
+						  ));
+						  ?>
+						</div>
+            <div class="form-group col-md-6">
+						  <label >Return Policy Payment</label>
+						  <?php echo $this->Form->input('return_policy_payment',array(
+							'class'=>"form-control",
+							'label'=>false
+
+						  ));
+						  ?>
+						</div>
+            <div class="form-group col-md-6">
+						  <label >Credit Period In Days</label>
+						  <?php echo $this->Form->input('credit_period',array(
+							'class'=>"form-control",
+							'label'=>false
+
+						  ));
+						  ?>
+						</div>
+            <div class="form-group col-md-6">
+						  <label >Remarks</label>
+						  <?php echo $this->Form->input('remarks',array(
+							'class'=>"form-control",
+							'label'=>false
+
+						  ));
+						  ?>
+						</div>
+            <div class="form-group col-md-12">
+              <label for="inputDescription">Description</label>
+              <?php echo $this->Form->textarea('description',array(
+                'id' => 'inputDescription',
+                'class'=>"form-control",
+                'placeholder'=>'Description',
+                'label'=>false
+
+              ));
+              ?>
+            </div>
+
 
 	            	</div>
 	              <!-- /.box-body -->
