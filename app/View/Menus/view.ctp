@@ -37,7 +37,8 @@
                                 <th>Name</th>
                                 <th>Add Menu Item</th>
                                 <th>View Menu Items</th>
-                                <th>Priority</th>                               
+                                <th>Menu Priority</th>       
+                                <th>Image Priority</th>                        
                                 <th>Edit</th>
                                 <th>Delete</th>
       			              </tr>
@@ -66,6 +67,11 @@
                                 <td>
 
                                     <input id="priority_<?= $data['Menu']['id'] ?>" type="number" class="form-control" value="<?= $data['Menu']['priority'] ?>" style="width: 30%;">
+                                    <button class="btn btn-primary btn-xs" ng-click="savePriority('<?= $data['Menu']['id'] ?>')">Save</button>
+                                </td>
+                                <td>
+
+                                    <input id="image_priority_<?= $data['Menu']['id'] ?>" type="number" class="form-control" value="<?= $data['Menu']['image_priority'] ?>" style="width: 30%;">
                                     <button class="btn btn-primary btn-xs" ng-click="savePriority('<?= $data['Menu']['id'] ?>')">Save</button>
                                 </td>
                                 <td>

@@ -9,6 +9,8 @@
             $scope.savePriority = function(item_id)
             {
                 var priority_val = document.getElementById('priority_'+item_id).value;
+                var image_priority_val = document.getElementById('image_priority_'+item_id).value;
+                
                 console.log("item_id: ",item_id);
                 console.log("Priority:",priority_val);
                 var params = {
@@ -16,7 +18,8 @@
                     url: baseUrl + 'menus/save_priority',
                     data: {
                         menu_id: item_id,
-                        priority: priority_val
+                        priority: priority_val,
+                        image_priority: image_priority_val
                     }
                 };
     

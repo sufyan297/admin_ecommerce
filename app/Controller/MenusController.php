@@ -68,7 +68,8 @@ class MenusController extends AppController
             $this->log($data);
             $this->Menu->id = $data['menu_id'];            
             $data['Menu']['priority'] = $data['priority'];
-
+            $data['Menu']['image_priority'] = $data['image_priority'];
+            
 
             if ($this->Menu->save($data)) {
                 //Successfully added.

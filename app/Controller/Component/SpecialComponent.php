@@ -76,6 +76,41 @@ class SpecialComponent extends Component {
         return false;
     }
 
+    /**
+    *   Export Fields
+    * @return comma seperated value
+    */
+    public function exportFields($fields = [],$type = 'excel')
+    {
+        $header_row = "";
+        foreach ($fields as $key => $value) {
+            if ($type == 'excel') {
+                $header_row .= $value."\t";
+            } else {
+                $header_row .= $value.",";
+            }
+        }
+        $header_row .= "\n";
+        return $header_row;
+    }
+    
+    /**
+    *
+    *
+    */
+    public function export($data = [], $filename = 'export',$type = 'excel')
+    {
+        $this->autoRender=false;
+        if ($type == 'excel') {
+            $filename = $filename."_".date("d_m_Y").".xls";
+            header('Content-type: application/ms-excel');
+        } else {
+            $filename = $filename."_".date("d_m_Y").".csv";
+            header('Content-type: text/csv');
+        }
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
+        echo($data);die();
+    }
 
     /**
      * Get Image Base Url

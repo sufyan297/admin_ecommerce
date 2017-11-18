@@ -47,6 +47,34 @@
 						  ?>
 						</div>
 
+						<div class="form-group">
+							<label for="inputName">Link<span style='color: red;'>*</span></label>
+							<?php echo $this->Form->input('link',array(
+								'id' => 'inputName',
+								'class'=>"form-control",
+								'placeholder'=>'Menu link (Place URL here for eg. http://krerum.com/aboutus)',
+								'label'=>false,
+								'required' => 'required',
+								'autofocus' => 'autofocus',
+								'value' => $menu['Menu']['link']
+							));
+							?>
+						</div>
+
+						<div class="col-md-6">
+							<div class="form-group">
+								<?=  $this->Html->image($IMAGE_BASE_URL.'menu/image_file/'.$menu['Menu']['image_dir']."/sm_".$menu['Menu']['image_file']); ?>
+							</div>
+						</div>
+
+						<div class="col-md-4">
+							<div class="form-group">
+                                <label for="inputPhoto">Photo</label>
+                                <?php
+                                    echo $this->Form->input("image_file",array('id'=>'inputPhoto','type'=>'file','class'=>'form-control','label'=>false,'autofocus'=>true));
+                                ?>
+							</div>
+						</div>
 	            	</div>
 	                <!-- /.box-body -->
 
