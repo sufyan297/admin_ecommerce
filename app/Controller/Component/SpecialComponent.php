@@ -71,6 +71,8 @@ class SpecialComponent extends Component {
             $url_slag = str_replace(" ","_",strtolower(trim($name)));
             $url_slag = str_replace("'","",$url_slag);
             $url_slag = str_replace("/","_",$url_slag);
+            $url_slag = str_replace("&","_",$url_slag);
+            
             return $url_slag;
         }
         return false;

@@ -3,7 +3,7 @@ App::uses('AppController', 'Controller');
 
 class MenusController extends AppController
 {
-    public $components = array('Paginator');
+    public $components = array('Paginator','Special');
     public $uses = ['Menu','MenuItem','ItemCategory'];
 
     public function beforeFilter()
@@ -102,12 +102,14 @@ class MenusController extends AppController
         if ($this->request->is('post')) {
             $data = $this->request->data;
 
+            $data['Menu']['url_slag'] = $this->Special->getUrlSlag($data['Menu']['name']);
+
             if ($this->Menu->save($data)) {
                 $this->Session->setFlash('
-                <div class="alert alert-success alert-dismissable">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    Menu `'.$data['Menu']['name'].'` added.
-                </div>');
+                    <div class="alert alert-success alert-dismissable">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                        Menu `'.$data['Menu']['name'].'` added.
+                    </div>');
                 return $this->redirect(['controller'=> 'menus', 'action' => 'view']); 
             } else {
                 $this->Session->setFlash('
@@ -140,6 +142,7 @@ class MenusController extends AppController
             $data = $this->request->data;
 
             $data['Menu']['id'] = $menu_id;
+            $data['Menu']['url_slag'] = $this->Special->getUrlSlag($data['Menu']['name']);
             
             if ($this->Menu->save($data)) {
                 $this->Session->setFlash('
