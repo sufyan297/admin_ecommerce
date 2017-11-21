@@ -58,7 +58,9 @@ class ItemsController extends AppController
             if (empty($data['Item']['item_sub_category_id'])) {
                 $data['Item']['item_sub_category_id'] = null;
             }
-            $chk_url_slag = $this->url_slag_exists($data['Item']['url_slag']);
+            $url_slag = null;
+            $url_slag = $this->Special->getItemUrlSlag($data['Item']['url_slag']);
+            $chk_url_slag = $this->url_slag_exists($url_slag);
             if ($chk_url_slag != false) {
                 $data['Item']['url_slag'] = $chk_url_slag;
             }
@@ -120,6 +122,9 @@ class ItemsController extends AppController
             if (empty($data['Item']['item_sub_category_id']) || $data['Item']['item_sub_category_id'] == 'undefined') {
                 $data['Item']['item_sub_category_id'] = null;
             }
+
+            $url_slag = null;
+            $data['Item']['url_slag'] = $this->Special->getItemUrlSlag($data['Item']['url_slag']);
 
             if ($this->Item->save($data)) {
                 //Successfully modified.
@@ -885,9 +890,11 @@ class ItemsController extends AppController
         $item = [];
         $item['Item']['name'] = $item_name;
 
-        $url_slag = str_replace(" ","-", strtolower($item_name));
-        $url_slag = str_replace("'","", $url_slag);
-
+        //Legacy
+        // $url_slag = str_replace(" ","-", strtolower($item_name));
+        // $url_slag = str_replace("'","", $url_slag);
+        //=-=-=-=-=-=-=-=-
+        $url_slag = $this->Special->getItemUrlSlag($item['Item']['name']);
         $chk_url_slag = $this->url_slag_exists($url_slag);
         if ($chk_url_slag != false) {
             //Already_Exists_It Means we got another URL_SLAG

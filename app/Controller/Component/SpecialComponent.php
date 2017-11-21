@@ -79,6 +79,26 @@ class SpecialComponent extends Component {
     }
 
     /**
+     * Url Slag for Item Name
+     * 
+     * @return url_slag
+     */
+    public function getItemUrlSlag($name = null)
+    {
+        $url_slag = null;
+        if ($name != null) {
+
+            $url_slag = str_replace(" ","-",strtolower(trim($name)));
+            $url_slag = str_replace("'","",$url_slag);
+            $url_slag = str_replace("/","-",$url_slag);
+            $url_slag = str_replace("&","-",$url_slag);
+            
+            return $url_slag;
+        }
+        return false;
+    }
+
+    /**
     *   Export Fields
     * @return comma seperated value
     */
