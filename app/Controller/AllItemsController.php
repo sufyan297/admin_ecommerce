@@ -82,6 +82,59 @@ class AllItemsController extends AppController
 
 
     /**
+     * index one Item
+     * 
+     * @return array
+     */
+    public function index_one($item_id = null)
+    {
+        $this->Item->Behaviors->load('Containable');
+        
+        if ($item_id != null) {
+            $item = $this->getItemDetails($item_id);
+
+            $formatted_array_for_saveMany = $this->saveManyArray($item);
+            
+            if ($this->AllItem->saveMany($formatted_array_for_saveMany)) {
+                //successfully saved.
+            }
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+            return true;
+        } else {
+                        //[404] Oops No Items Found!
+            //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+            return false;
+        }
+    }
+
+
+    /**
+     * Index One [REST]
+     * 
+     * @return json
+     */
+    public function index_one_rest($item_id = null)
+    {
+        if ($item_id != null) {
+            if ($this->index_one($item_id)) {
+                //Successful.
+                $res = new ResponseObject ( ) ;
+                $res -> status = 'success' ;
+                $res -> message = 'Item successfully indexed.' ;
+                $this -> response -> body ( json_encode ( $res ) ) ;
+                return $this -> response ;
+            }
+        }
+
+        //Failure.
+        $res = new ResponseObject ( ) ;
+        $res -> status = 'error' ;
+        $res -> message = 'Failed to index.' ;
+        $this -> response -> body ( json_encode ( $res ) ) ;
+        return $this -> response ;
+    }
+
+    /**
     *   Proper Formatted Array Which we can easily saveMany
     *
     * @return array
@@ -213,6 +266,17 @@ class AllItemsController extends AppController
             [
                 'conditions' => [
                     'Item.id' => $item_id
+                ],
+                'contain' => [
+                    'SellerItem' => [
+                        'order' => 'SellerItem.discount_price'
+                    ],
+                    'SellerItem.Seller',
+                    'ItemVariant',
+                    'ItemVariant.Variant',
+                    'ItemVariant.VariantProperty',
+                    'ItemCategory',
+                    'ItemSubCategory'
                 ]
             ]
         );

@@ -1,5 +1,7 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('HttpSocket', 'Network/Http');
+App::import('Controller', 'AllItems'); // mention at top
 
 class ItemsController extends AppController
 {
@@ -286,7 +288,6 @@ class ItemsController extends AppController
     //This is For Temp Purpose.
     // public function deletePhoto($id = null)
     // {
-        
     //     if ($this->ItemPhoto->delete($id)) {
             
     //         $res = new ResponseObject ( ) ;
@@ -454,7 +455,7 @@ class ItemsController extends AppController
                     return $this -> response ;    
                 }
             }
-            
+
             $res = new ResponseObject ( ) ;
             $res -> status = 'error' ;
             $res -> message = 'Oops! Something went wrong.' ;
@@ -514,6 +515,15 @@ class ItemsController extends AppController
                 foreach ($data['variant']['sub_variants'] as $key => $value) {
                     $this->_addItemVariant($child_item['Item']['id'], $value['variant_id'], $value['variant_property_id']);
                 }
+
+                //INDEX THIS ITEM
+                try {
+                    $all_items = new AllItemsController;
+                    // Call a method from
+                    $all_items->index_one($data['variant']['id']);
+                } catch(Exception $err) {}
+
+                //=-=-=-=-=-=-=-=-=-=-=-
 
                 //Successfully added.
                 $res = new ResponseObject ( ) ;
