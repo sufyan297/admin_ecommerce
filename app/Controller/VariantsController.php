@@ -4,7 +4,7 @@ App::uses('AppController', 'Controller');
 class VariantsController extends AppController
 {
     public $components = array('Paginator','Special');
-    public $uses = array('Variant','VariantProperty');
+    public $uses = array('Variant','VariantProperty','AllItem');
 
     public function beforeFilter()
     {
@@ -18,6 +18,18 @@ class VariantsController extends AppController
         $this->Auth->allow('login'); //Without Logged IN which page can be access.. assign here
     }
 
+    private function addField($field = null)
+    {
+        if ($field != null) {
+            $db = new DATABASE_CONFIG;
+
+            $tbl_name = 'axi_all_items';
+            $db_name = $db->default['database'];
+
+            $this->AllItem->query("CALL add_column_all_items('".$field."','".$db_name."','".$tbl_name."')");
+            return true;
+        }
+    }
 
     /**
     *   ADD Variant
@@ -34,8 +46,11 @@ class VariantsController extends AppController
             $data = $this->request->data;
 
             $data['Variant']['url_slag'] = $this->Special->getUrlSlag($data['Variant']['name']);
+            
+            if ($this->Variant->save($data)) {                
 
-            if ($this->Variant->save($data)) {
+                $this->addField($data['Variant']['url_slag']);
+
                 //Successfully added.
                 $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
                                           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -71,8 +86,11 @@ class VariantsController extends AppController
 
             $this->Variant->id = $id;
             $data['Variant']['url_slag'] = $this->Special->getUrlSlag($data['Variant']['name']);
-
+            
             if ($this->Variant->save($data)) {
+
+                $this->addField($data['Variant']['url_slag']);
+                
                 //Successfully modified.
                 $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
                                           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

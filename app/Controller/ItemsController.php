@@ -1,6 +1,5 @@
 <?php
 App::uses('AppController', 'Controller');
-App::uses('HttpSocket', 'Network/Http');
 App::import('Controller', 'AllItems'); // mention at top
 
 class ItemsController extends AppController
