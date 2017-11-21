@@ -1,5 +1,15 @@
 # Admin Panel for E-Commerce #
 
+# Tag: v0.0.12 (Date: 21st November 2017)
+- CMS Support added for Static Pages.
+- CKEditor added for CMS.
+- Seller requests added.
+- Seller Form Added.
+- Dynamic MENU management added.
+- Many more bug fixes in MENU.
+- Bug fixes.
+- Multiple Sellers Support removed.
+
 # Tag: v0.0.11 (Date: 16th November 2017)
 - Key/Value Pair Description supported.
 - Few Minor issue fixes.
