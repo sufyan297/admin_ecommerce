@@ -439,6 +439,30 @@ class ItemsController extends AppController
         return false;
     }
 
+    public function removeSellerItem()
+    {
+        if ($this->request->is('post')) {
+            $data = $this->request->input('json_decode',true);
+
+            if (isset($data['seller_item_id'])) {
+                if ($this->SellerItem->delete($data['seller_item_id'])) {
+
+                    $res = new ResponseObject ( ) ;
+                    $res -> status = 'success' ;
+                    $res -> message = 'Seller item removed.' ;
+                    $this -> response -> body ( json_encode ( $res ) ) ;
+                    return $this -> response ;    
+                }
+            }
+            
+            $res = new ResponseObject ( ) ;
+            $res -> status = 'error' ;
+            $res -> message = 'Oops! Something went wrong.' ;
+            $this -> response -> body ( json_encode ( $res ) ) ;
+            return $this -> response ;
+        }
+    }
+
     //------------------------------------------------
     //  API
     //--------------------------------------------

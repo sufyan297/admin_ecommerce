@@ -175,7 +175,12 @@
         {
             console.log("[Add] Variant Idx:",var_idx);
             console.log("[Add] SUB Variant Idx: ", sub_var_idx);
+            if ($scope.variants[var_idx].sellers.length === 1) {
+                growl.info("Sorry you can't add multiple sellers for a single combination.");
+                return 0;
+            }
 
+            //We haven't given support for multiple sellers on View Side so no need to gave them support at Backend too.
             $scope.variants[var_idx].sellers.push(
                 {
                     id: null,
@@ -198,10 +203,42 @@
 
         $scope.removeSeller = function removeSeller(var_idx, sub_var_idx)
         {
+            if (confirm("Are you sure? you want to remove this seller for this item combination?")) {
+
+                var seller_data = $scope.variants[var_idx].sellers[sub_var_idx];
+
+                if (seller_data && seller_data.seller_item_id === null) {
+                    $scope.variants[var_idx].sellers.splice(sub_var_idx, 1);
+                    return 0;                    
+                }
+
+                var req = {
+                    method: 'POST',
+                    url: baseUrl + 'items/removeSellerItem',
+                    data: {
+                        seller_item_id: seller_data.seller_item_id
+                    }
+                };
+                // console.log("[POST] Request: ", req);
+    
+                $http(req)
+                .then(function successCallback(resp) {
+                    //Success
+                    if (resp.data.status == 'success') {
+                        growl.success(resp.data.message);
+                        $scope.variants[var_idx].sellers.splice(sub_var_idx, 1);
+                    } else {
+                        growl.error(resp.data.message);
+                    }
+                }, function errorCallback(response) {
+                    console.log(response);
+                });
+            }
             console.log("[Remove] Seller Idx:",var_idx);
             console.log("[Remove] SUB Seller Idx: ", sub_var_idx);
 
-            $scope.variants[var_idx].sellers.splice(sub_var_idx, 1);
+            console.log("Seller:", $scope.variants[var_idx].sellers[sub_var_idx]);
+
         };
 
         //--------------------------------
@@ -564,7 +601,11 @@
             $scope.input_show_kv_panel = false;            
         }
 
-        $scope.item_desc = JSON.parse(document.getElementById('kv_description_json').innerHTML);
+        var _tmp_kv_description = document.getElementById('kv_description_json').innerHTML;
+
+        if (_tmp_kv_description && _tmp_kv_description !== '') {
+            $scope.item_desc = JSON.parse(_tmp_kv_description);
+        }
         //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
         $scope.addDetailsGroup = function addDetailsGroup()
