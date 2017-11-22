@@ -155,7 +155,8 @@ class AllItemsController extends AppController
             $tmp['AllItem']['image_file'] = $val['Item']['image_file'];
             $tmp['AllItem']['image_dir'] = $val['Item']['image_dir'];
             
-
+            $tmp['AllItem']['is_featured'] = $val['Item']['is_featured'];
+            
             $tmp['AllItem']['price'] = $val['SellerItem'][0]['price'];
             $tmp['AllItem']['discount_price'] = $val['SellerItem'][0]['discount_price'];
             $tmp['AllItem']['seller_id'] = $val['SellerItem'][0]['seller_id'];
