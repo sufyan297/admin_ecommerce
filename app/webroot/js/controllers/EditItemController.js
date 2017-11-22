@@ -114,7 +114,8 @@
                     },
                 ],
                 price: '',
-                discount_price: ''
+                discount_price: '',
+                is_featured: false
             }
         ];
 
@@ -148,7 +149,8 @@
                         }
                     ],
                     price: '',
-                    discount_price: ''
+                    discount_price: '',
+                    is_featured: false                    
                 }
             );
 
@@ -187,7 +189,7 @@
                     price: 0.00,
                     discount_price: 0.00,
                     seller_item_id: null,
-                    seller_sku_code: null            
+                    seller_sku_code: null      
                 }
             );
         };

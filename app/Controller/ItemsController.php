@@ -59,8 +59,8 @@ class ItemsController extends AppController
                 $data['Item']['item_sub_category_id'] = null;
             }
             $url_slag = null;
-            $url_slag = $this->Special->getItemUrlSlag($data['Item']['url_slag']);
-            $chk_url_slag = $this->url_slag_exists($url_slag);
+            $data['Item']['url_slag'] = $this->Special->getItemUrlSlag($data['Item']['url_slag']);
+            $chk_url_slag = $this->url_slag_exists($data['Item']['url_slag'] );
             if ($chk_url_slag != false) {
                 $data['Item']['url_slag'] = $chk_url_slag;
             }
@@ -335,7 +335,7 @@ class ItemsController extends AppController
     }
 
     //----------------------------------
-    private function _addItemChild($item_id = null, $id = null, $price = null, $discount_price = null)
+    private function _addItemChild($item_id = null, $id = null, $price = null, $discount_price = null, $is_featured = 0)
     {
         if ($item_id != null && $price != null && $discount_price != null) {
 
@@ -356,6 +356,7 @@ class ItemsController extends AppController
             $child_item['Item']['item_id'] = $item_id;
             $child_item['Item']['price'] = $price;
             $child_item['Item']['discount_price'] = $discount_price;
+            $child_item['Item']['is_featured'] = $is_featured;
 
             if ($id == null) {
                 $this->Item->create(); //create new child
@@ -500,7 +501,10 @@ class ItemsController extends AppController
             //----------------------------------------------------------------------------
 
             //Save Item Price
-            $child_item = $this->_addItemChild($data['item_id'], $data['variant']['id'], $data['variant']['price'], $data['variant']['discount_price']);
+            $child_item = $this->_addItemChild(
+                $data['item_id'], $data['variant']['id'], 
+                $data['variant']['price'], $data['variant']['discount_price'], 
+                $data['variant']['is_featured']);
             if ($child_item != false) {
                 //AddThisItemForLoggedInSeller
                 //For Now let's add for just single seller
@@ -667,7 +671,8 @@ class ItemsController extends AppController
                                 'ChildItems.price',
                                 'ChildItems.discount_price',
                                 'ChildItems.image_file',
-                                'ChildItems.image_dir'
+                                'ChildItems.image_dir',
+                                'ChildItems.is_featured'
                             ],
                             'conditions' => [
                                 'ChildItems.del_flag !=' => 1
@@ -712,6 +717,7 @@ class ItemsController extends AppController
                 $tmp['discount_price'] = $value['discount_price'];
                 $tmp['image_file'] = $value['image_file'];
                 $tmp['image_dir'] = $value['image_dir'];
+                $tmp['is_featured'] = (bool) $value['is_featured'];
                 
 
                 $tmp['sub_variants'] = [];

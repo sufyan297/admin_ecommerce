@@ -425,6 +425,14 @@
                       <input type="hidden" ng-model="var.id" />
                       <!-- Ok Great -->
 
+                    <div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<input id="inputFeatured{{var.id}}" type="checkbox" ng-model="var.is_featured" /> 							
+								<label for="inputFeatured{{var.id}}"><h4>Featured Item?</h4></label>
+							</div>
+						</div>
+                    </div>
                       <div class="row">
                           <div class="col-md-6">
                               <div class="form-group">
@@ -436,7 +444,7 @@
                                   'placeholder'=>'Enter Price',
                                   'label'=>false,
                                   'ng-model' => 'var.price'
-                              ));*/
+                                ));*/
                                 ?>
                               </div>
                           </div>
