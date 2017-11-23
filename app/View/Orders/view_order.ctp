@@ -271,6 +271,9 @@
                                                 <b><?= $var['key'] ?></b> : <span style="color: green; font-weight: 800;"> <?= $var['value'] ?> </span>
                                             <?php endforeach; ?>
                                             )
+                                            <br/>
+                                            <b>Seller:</b> <?= $data['seller_name'] ?> &nbsp;&nbsp;&nbsp;
+                                            <b>Seller SKU:</b> <?= $data['seller_sku_code'] ?>
                                         </td>
 
                                         <td>

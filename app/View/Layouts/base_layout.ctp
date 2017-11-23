@@ -336,13 +336,13 @@
             </li>
 
             <li class="treeview">
-				<a href="#">
-                    <i class="fa fa-shopping-cart"></i> <span>Orders</span>
-                    <span class="pull-right-container">
-                        <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                </a>
-                <ul class="treeview-menu">
+			<a href="#">
+				<i class="fa fa-shopping-cart"></i> <span>Orders</span>
+				<span class="pull-right-container">
+					<i class="fa fa-angle-left pull-right"></i>
+				</span>
+			</a>
+            <ul class="treeview-menu">
 					<li>
 						<a href="<?php echo $this->Html->url(array('controller' => 'orders', 'action' => 'index')); ?>"><i class="fa fa-circle-o"></i> Pending Dispatch</a>
 					</li>
@@ -409,6 +409,23 @@
                 <ul class="treeview-menu">
                     <li><a href="<?php echo $this->Html->url(array('controller' => 'menus', 'action' => 'add')); ?>"><i class="fa fa-circle-o"></i> Add Menu</a></li>
                     <li><a href="<?php echo $this->Html->url(array('controller' => 'menus', 'action' => 'view')); ?>"><i class="fa fa-circle-o"></i> View</a></li>
+                </ul>
+            </li>
+
+			<li class="treeview">
+				<a href="#">
+                    <i class="fa fa-rss"></i> <span>User Reviews</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+					<li>
+						<a href="<?php echo $this->Html->url(array('controller' => 'user_reviews', 'action' => 'add')); ?>"><i class="fa fa-circle-o"></i> Add </a>
+					</li>
+					<li>
+						<a href="<?php echo $this->Html->url(array('controller' => 'user_reviews', 'action' => 'view')); ?>"><i class="fa fa-circle-o"></i> View </a>
+					</li>
                 </ul>
             </li>
 
