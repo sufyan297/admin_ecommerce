@@ -1,5 +1,13 @@
 # Admin Panel for E-Commerce #
 
+# Tag: v0.0.13 (Date: 24th November 2017)
+- Users CRUD added.
+- User Reviews CRUD added.
+- Subscribers CRUD added.
+- Each Item will be indexed automatically, when you edit them.
+- Each child item can be set as featured.
+- Many more bugs fixes.
+
 # Tag: v0.0.12 (Date: 21st November 2017)
 - CMS Support added for Static Pages.
 - CKEditor added for CMS.
