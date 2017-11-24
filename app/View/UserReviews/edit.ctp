@@ -80,7 +80,7 @@
                     <div class="form-group">
                         <label>Picture: </label><span style="color:red;">*</span>
                         <?php
-                            echo $this->Form->input("image_file",array('type'=>'file','class'=>'form-control','label'=>false,'autofocus'=>true,'required'=>'required'));
+                            echo $this->Form->input("image_file",array('type'=>'file','class'=>'form-control','label'=>false,'autofocus'=>true));
                         ?>
                     </div>
                     <div class="form-group">
