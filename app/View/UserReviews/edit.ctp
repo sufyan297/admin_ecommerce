@@ -22,7 +22,7 @@
 		            </div>
 	            </div>
 	            <!-- /.box-header -->
-                <?php echo $this->Form->create('Review',array('class'=>'form-signin','type'=>'file','role'=>'form', 'multiple')); ?>
+                <?php echo $this->Form->create('UserReview',array('class'=>'form-signin','type'=>'file','role'=>'form', 'multiple')); ?>
                 <div class="box-body">
 
                     <div class="form-group">
