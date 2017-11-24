@@ -115,7 +115,9 @@
                 ],
                 price: '',
                 discount_price: '',
-                is_featured: false
+                is_featured: false,
+                item_min_qty: 1,
+                item_max_qty: 1
             }
         ];
 
@@ -150,7 +152,9 @@
                     ],
                     price: '',
                     discount_price: '',
-                    is_featured: false                    
+                    is_featured: false,
+                    item_min_qty: 1,
+                    item_max_qty: 1
                 }
             );
 

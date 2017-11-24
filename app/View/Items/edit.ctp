@@ -424,7 +424,7 @@
                       <!-- Hidden Fields -->
                       <input type="hidden" ng-model="var.id" />
                       <!-- Ok Great -->
-
+                    <h4>Extra Options:</h4>
                     <div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
@@ -433,6 +433,21 @@
 							</div>
 						</div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="inputMinQty{{var.id}}">Min Qty.<span style='color: red;'>*</span></label>
+                                <input id="inputMinQty{{var.id}}" type="number" ng-model="var.item_min_qty" class="form-control" required/>
+							</div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="inputMaxQty{{var.id}}">Max Qty.<span style='color: red;'>*</span></label>
+                                <input id="inputMaxQty{{var.id}}" type="number" ng-model="var.item_max_qty" class="form-control" required/>
+							</div>
+                        </div>
+                    </div>
+                    <hr />
                       <div class="row">
                           <div class="col-md-6">
                               <div class="form-group">
@@ -622,7 +637,7 @@
                               <div class="col-md-6">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <h4 class="box-title">Upload Primary Photo</h4>
+                                            <h4 class="box-title">Upload Gallery Photos</h4>
                                         </div>
                                     </div>
 

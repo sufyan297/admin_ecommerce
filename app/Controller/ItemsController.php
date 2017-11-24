@@ -335,7 +335,8 @@ class ItemsController extends AppController
     }
 
     //----------------------------------
-    private function _addItemChild($item_id = null, $id = null, $price = null, $discount_price = null, $is_featured = 0)
+    private function _addItemChild($item_id = null, $id = null, $price = null, $discount_price = null, $is_featured = 0, 
+        $itm_min_qty = 1, $itm_max_qty = 1)
     {
         if ($item_id != null && $price != null && $discount_price != null) {
 
@@ -357,6 +358,9 @@ class ItemsController extends AppController
             $child_item['Item']['price'] = $price;
             $child_item['Item']['discount_price'] = $discount_price;
             $child_item['Item']['is_featured'] = $is_featured;
+
+            $child_item['Item']['item_min_qty'] = $itm_min_qty;
+            $child_item['Item']['item_max_qty'] = $itm_max_qty;
 
             if ($id == null) {
                 $this->Item->create(); //create new child
@@ -503,8 +507,12 @@ class ItemsController extends AppController
             //Save Item Price
             $child_item = $this->_addItemChild(
                 $data['item_id'], $data['variant']['id'], 
-                $data['variant']['price'], $data['variant']['discount_price'], 
-                $data['variant']['is_featured']);
+                $data['variant']['price'], 
+                $data['variant']['discount_price'], 
+                $data['variant']['is_featured'],
+                $data['variant']['item_min_qty'],
+                $data['variant']['item_max_qty']
+            );
             if ($child_item != false) {
                 //AddThisItemForLoggedInSeller
                 //For Now let's add for just single seller
@@ -672,7 +680,9 @@ class ItemsController extends AppController
                                 'ChildItems.discount_price',
                                 'ChildItems.image_file',
                                 'ChildItems.image_dir',
-                                'ChildItems.is_featured'
+                                'ChildItems.is_featured',
+                                'ChildItems.item_min_qty',
+                                'ChildItems.item_max_qty'
                             ],
                             'conditions' => [
                                 'ChildItems.del_flag !=' => 1
@@ -718,6 +728,9 @@ class ItemsController extends AppController
                 $tmp['image_file'] = $value['image_file'];
                 $tmp['image_dir'] = $value['image_dir'];
                 $tmp['is_featured'] = (bool) $value['is_featured'];
+                
+                $tmp['item_min_qty'] = (int) $value['item_min_qty'];
+                $tmp['item_max_qty'] = (int) $value['item_max_qty'];
                 
 
                 $tmp['sub_variants'] = [];
