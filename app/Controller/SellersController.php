@@ -100,6 +100,8 @@ class SellersController extends AppController
         $data['Seller']['request_accept'] = 1;
         $data['Seller']['is_active'] = 1;
 
+        $data['Seller']['seller_no'] = $this->_getNextSellerNo();
+        
         if ($this->Seller->save($data)) {
             //Successfully modified.
             $this->Session->setFlash('<div class="alert alert-success alert-dismissable">

@@ -53,8 +53,8 @@
                                     <li><b>BANK Account NO: </b><?= $data['Seller']['bank_account_no']; ?></li>
                                     <li><b>IFSC Code: </b><?= $data['Seller']['bank_IFSC']; ?></li>
                                     <li><b>Branch: </b><?= $data['Seller']['branch']; ?></li>
-                                    <li></li>
-
+                                    <li><b>Email: </b><?= $data['Seller']['email']; ?></li>
+                                    
                                   </ul>
                                 </td>
 

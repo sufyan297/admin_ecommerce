@@ -26,141 +26,161 @@
 		            </div>
 	            </div>
 	            <!-- /.box-header -->
-	            <!-- form start -->
-				<?php echo $this->Form->create('Seller',array('class'=>'form-signin','type'=>'file','role'=>'form', 'multiple')); ?>
-	              <div class="box-body">
-  					<?php
-  						// echo $this->Session->flash('auth');
-  						echo $this->Session->flash();
-  					?>
-						<div class="form-group col-md-12">
-						  <label for="inputName">Name<span style='color: red;'>*</span></label>
-						  <?php echo $this->Form->input('name',array(
-                            'id' => 'inputName',
-							'class'=>"form-control",
-							'placeholder'=>'Seller name',
-							'label'=>false,
-							'required' => 'required',
-							'autofocus' => 'autofocus',
-                            'onChange' => 'changeUrlSlag()',
-                            'value' => $data['Seller']['name']
-						  ));
-						  ?>
-						</div>
+			<!-- form start -->
+			<?php echo $this->Form->create('Seller',array('class'=>'form-signin','type'=>'file','role'=>'form', 'multiple')); ?>
+			<div class="box-body">
+			<?php
+				// echo $this->Session->flash('auth');
+				echo $this->Session->flash();
+			?>
+			<div class="form-group col-md-12">
+				<label for="inputName">Name<span style='color: red;'>*</span></label>
+				<?php echo $this->Form->input('name',array(
+				'id' => 'inputName',
+				'class'=>"form-control",
+				'placeholder'=>'Seller name',
+				'label'=>false,
+				'required' => 'required',
+				'autofocus' => 'autofocus',
+				'onChange' => 'changeUrlSlag()',
+				'value' => $data['Seller']['name']
+				));
+				?>
+			</div>
+
             <div class="form-group col-md-12">
-						  <label >Address<span style='color: red;'>*</span></label>
-						  <?php echo $this->Form->input('address',array(
-							'class'=>"form-control",
-							'label'=>false,
-              'value' => $data['Seller']['address'],
-              'required' => 'required'
-
-						  ));
-						  ?>
-						</div>
-
-            <div class="form-group col-md-6">
-						  <label >Contact Number<span style='color: red;'>*</span></label>
-						  <?php echo $this->Form->input('mobile',array(
-							'class'=>"form-control",
-							'label'=>false,
-              'required' => 'required',
-              
-              'value' => $data['Seller']['mobile']
-						  ));
-						  ?>
-						</div>
+				<label >Address<span style='color: red;'>*</span></label>
+				<?php echo $this->Form->input('address',array(
+				'class'=>"form-control",
+				'label'=>false,
+				'value' => $data['Seller']['address'],
+				'required' => 'required'
+				));
+				?>
+			</div>
 
             <div class="form-group col-md-6">
-						  <label >Alternate Contact Number</label>
-						  <?php echo $this->Form->input('mobile_2',array(
-							'class'=>"form-control",
-							'label'=>false,
-              'value' => $data['Seller']['mobile_2']
-						  ));
-						  ?>
-						</div>
+				<label >Contact Number<span style='color: red;'>*</span></label>
+				<?php echo $this->Form->input('mobile',array(
+				'class'=>"form-control",
+				'label'=>false,
+				'required' => 'required',
+				'value' => $data['Seller']['mobile']
+				));
+				?>
+			</div>
+
             <div class="form-group col-md-6">
-						  <label >PAN Card Number</label>
-						  <?php echo $this->Form->input('PAN',array(
-							'class'=>"form-control",
-							'label'=>false,
-              'value' => $data['Seller']['PAN']
-						  ));
-						  ?>
-						</div>
+				<label >Alternate Contact Number</label>
+				<?php echo $this->Form->input('mobile_2',array(
+				'class'=>"form-control",
+				'label'=>false,
+				'value' => $data['Seller']['mobile_2']
+				));
+				?>
+			</div>
+
             <div class="form-group col-md-6">
-						  <label >Bank Account Number</label>
-						  <?php echo $this->Form->input('bank_account_no',array(
-							'class'=>"form-control",
-							'label'=>false,
-              'value' => $data['Seller']['bank_account_no']
-						  ));
-						  ?>
-						</div>
+				<label >PAN Card Number</label>
+				<?php echo $this->Form->input('PAN',array(
+				'class'=>"form-control",
+				'label'=>false,
+				'value' => $data['Seller']['PAN']
+				));
+				?>
+			</div>
+
             <div class="form-group col-md-6">
-						  <label >IFSC Code</label>
-						  <?php echo $this->Form->input('bank_IFSC',array(
-							'class'=>"form-control",
-							'label'=>false,
-              'value' => $data['Seller']['bank_IFSC']
-						  ));
-						  ?>
-						</div>
+				<label >Bank Account Number</label>
+				<?php echo $this->Form->input('bank_account_no',array(
+				'class'=>"form-control",
+				'label'=>false,
+				'value' => $data['Seller']['bank_account_no']
+				));
+				?>
+			</div>
+
             <div class="form-group col-md-6">
-						  <label >Branch</label>
-						  <?php echo $this->Form->input('branch',array(
-							'class'=>"form-control",
-							'label'=>false,
-              'value' => $data['Seller']['branch']
-						  ));
-						  ?>
-						</div>
-            <div class="form-group col-md-12">
-						  <label >Product Category</label>
-						  <?php echo $this->Form->input('product_category',array(
-							'class'=>"form-control",
-							'label'=>false,
-              'value' => $data['Seller']['product_category']
-						  ));
-						  ?>
-						</div>
+				<label >IFSC Code</label>
+				<?php echo $this->Form->input('bank_IFSC',array(
+				'class'=>"form-control",
+				'label'=>false,
+				'value' => $data['Seller']['bank_IFSC']
+				));
+				?>
+			</div>
+
             <div class="form-group col-md-6">
-						  <label >Payment Terms</label>
-						  <?php echo $this->Form->input('payment_terms',array(
-							'class'=>"form-control",
-							'label'=>false,
-              'value' => $data['Seller']['payment_terms']
-						  ));
-						  ?>
-						</div>
+				<label >Branch</label>
+				<?php echo $this->Form->input('branch',array(
+				'class'=>"form-control",
+				'label'=>false,
+				'value' => $data['Seller']['branch']
+				));
+				?>
+			</div>
+
             <div class="form-group col-md-6">
-						  <label >Return Policy Payment</label>
-						  <?php echo $this->Form->input('return_policy_payment',array(
-							'class'=>"form-control",
-							'label'=>false,
-              'value' => $data['Seller']['return_policy_payment']
-						  ));
-						  ?>
-						</div>
+				<label >Product Category</label>
+				<?php echo $this->Form->input('product_category',array(
+				'class'=>"form-control",
+				'label'=>false,
+				'value' => $data['Seller']['product_category']
+				));
+				?>
+			</div>
+
             <div class="form-group col-md-6">
-						  <label >Credit Period In Days</label>
-						  <?php echo $this->Form->input('credit_period',array(
-							'class'=>"form-control",
-							'label'=>false,
-              'value' => $data['Seller']['credit_period']
-						  ));
-						  ?>
-						</div>
+				<label >Email address</label>
+				<?php echo $this->Form->input('email',array(
+				'class'=>"form-control",
+				'label'=>false,
+				'value' => $data['Seller']['email']
+				));
+				?>
+			</div>
+
             <div class="form-group col-md-6">
-						  <label >Remarks</label>
-						  <?php echo $this->Form->input('remarks',array(
-							'class'=>"form-control",
-							'label'=>false,
-              'value' => $data['Seller']['remarks']
-						  ));
-						  ?>
-						</div>
+				<label >Payment Terms</label>
+				<?php echo $this->Form->input('payment_terms',array(
+				'class'=>"form-control",
+				'label'=>false,
+				'value' => $data['Seller']['payment_terms']
+				));
+				?>
+			</div>
+
+
+            <div class="form-group col-md-6">
+				<label >Return Policy Payment</label>
+				<?php echo $this->Form->input('return_policy_payment',array(
+				'class'=>"form-control",
+				'label'=>false,
+				'value' => $data['Seller']['return_policy_payment']
+				));
+				?>
+			</div>
+
+            <div class="form-group col-md-6">
+				<label >Credit Period In Days</label>
+				<?php echo $this->Form->input('credit_period',array(
+				'class'=>"form-control",
+				'label'=>false,
+				'value' => $data['Seller']['credit_period']
+				));
+				?>
+			</div>
+
+            <div class="form-group col-md-6">
+				<label >Remarks</label>
+				<?php echo $this->Form->input('remarks',array(
+				'class'=>"form-control",
+				'label'=>false,
+				'value' => $data['Seller']['remarks']
+				));
+				?>
+			</div>
+
             <div class="form-group col-md-12">
               <label for="inputDescription">Description</label>
               <?php echo $this->Form->textarea('description',array(
