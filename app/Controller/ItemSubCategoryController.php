@@ -3,7 +3,7 @@ App::uses('AppController', 'Controller');
 
 class ItemSubCategoryController extends AppController
 {
-    public $components = array('Paginator');
+    public $components = array('Paginator','Special');
     public $uses = array('ItemSubCategory','ItemCategory');
 
     public function beforeFilter()
@@ -34,6 +34,8 @@ class ItemSubCategoryController extends AppController
         {
             $data = $this->request->data;
             $data['ItemSubCategory']['item_category_id'] = $id;
+            $data['ItemSubCategory']['url_slag'] = $this->Special->getUrlSlag($data['ItemSubCategory']['name']);
+            
             if ($this->ItemSubCategory->save($data)) {
                 //Successfully added.
                 $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
@@ -69,6 +71,8 @@ class ItemSubCategoryController extends AppController
             $data = $this->request->data;
 
             $this->ItemSubCategory->id = $id;
+            $data['ItemSubCategory']['url_slag'] = $this->Special->getUrlSlag($data['ItemSubCategory']['name']);
+            
             if ($this->ItemSubCategory->save($data)) {
                 //Successfully modified.
                 $this->Session->setFlash('<div class="alert alert-success alert-dismissable">

@@ -58,7 +58,7 @@
 						  ?>
 						</div>
 
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                           <label for="inputURLSlag">Url Slag<span style='color: red;'>*</span></label>
                           <?php echo $this->Form->input('url_slag',array(
                             'id' => 'inputURLSlag',
@@ -68,7 +68,7 @@
                             'required' => 'required',
                           ));
                           ?>
-                        </div>
+                        </div> -->
 	            	</div>
 	              <!-- /.box-body -->
 

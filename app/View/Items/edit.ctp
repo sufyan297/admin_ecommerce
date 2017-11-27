@@ -433,6 +433,10 @@
 							</div>
 						</div>
                     </div>
+
+                    <h5>
+                        <b>Qty limit to be purchased at a time:</b>
+                    </h5>
                     <div class="row">
                         <div class="col-md-2">
                             <div class="form-group">

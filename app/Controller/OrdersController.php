@@ -30,7 +30,7 @@ class OrdersController extends AppController
         $this->Order->Behaviors->load('Containable');
         
         $this->Paginator->settings = array(
-            'limit' => 10,
+            'limit' => 20,
             'order' => 'Order.order_placed_at DESC',
             'conditions' => [
                 'Order.status' => 1,
@@ -64,7 +64,7 @@ class OrdersController extends AppController
         $this->Order->Behaviors->load('Containable');
         
         $this->Paginator->settings = array(
-            'limit' => 10,
+            'limit' => 20,
             'order' => 'Order.order_placed_at DESC',
             'conditions' => [
                 'Order.status' =>2,
@@ -96,8 +96,8 @@ class OrdersController extends AppController
      
         
         $this->Paginator->settings = array(
-            'limit' => 10,
-            'order' => 'Order.order_placed_at DESC',
+            'limit' => 20,
+            'order' => 'Order.created DESC',
             'conditions' => [
                 'Order.status' => 0,
             ],
@@ -126,7 +126,7 @@ class OrdersController extends AppController
         $this->Order->Behaviors->load('Containable');
 
         $this->Paginator->settings = array(
-            'limit' => 10,
+            'limit' => 20,
             'order' => 'Order.order_placed_at DESC',
             'conditions' => [
                 'Order.status' => -1,
