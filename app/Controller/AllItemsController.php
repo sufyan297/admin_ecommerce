@@ -109,6 +109,40 @@ class AllItemsController extends AppController
 
 
     /**
+     * Get All Child Items
+     * 
+     * @param uuid $item_id Parent Item Id
+     * @return array
+     */
+    public function index_all_childs($item_id = null)
+    {
+        if ($item_id != null) {
+        $this->Item->Behaviors->load('Containable');
+        
+            $tmp = $this->Item->find('all',
+                [
+                    'conditions' => [
+                        'Item.item_id' => $item_id
+                    ],
+                    'contain' => [],
+                    'fields' => [
+                        'Item.id'
+                    ]
+                ]
+            );
+
+            if (sizeof($tmp) > 0) {
+                //if found any Item
+                foreach ($tmp as $key => $val) {
+                    $this->index_one($val['Item']['id']);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Index One [REST]
      * 
      * @return json

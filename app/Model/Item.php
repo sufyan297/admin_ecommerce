@@ -19,7 +19,7 @@ class Item extends Model
                         'secret' =>  'fAhq5fP8IXRXWPHudtUvlrqdRBy0anzm6DafGokd',
                         'bucket' =>  'krerum-prod',
                         'prefix_path' => 'files/', //make sure to end path with dir seperator '/'
-                        'original_upload' => true //Upload original image?
+                        'original_upload' => false //Upload original image?
                     ],
                     // Use php for localhost or where imagick is not installed
                     'thumbnailMethod'=>"php",

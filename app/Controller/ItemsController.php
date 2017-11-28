@@ -210,6 +210,56 @@ class ItemsController extends AppController
         }
     }
 
+    /** Toggle item
+     * 
+     */
+    public function toggle_item($id = null, $status = 0) 
+    {
+        if ($id != null) {
+            $this->Item->id = $id;
+            $tmp = [];
+            $tmp['Item']['is_active'] = $status;
+
+            if ($this->Item->save($tmp)) {
+
+                //Active/InActive all of it's Child Item too
+                if ($this->Item->updateAll(
+                    array('Item.is_active' => $status),
+                    array('Item.item_id' => $id)
+                )) {
+                    //Index When it is Active/InActive
+                    try {
+                        $all_items = new AllItemsController;
+                        // Call a method from
+                        $all_items->index_all_childs($id); //Passed Parent ItemID
+                        //All of it's childs will be indexed.
+                    } catch(Exception $err) {}
+                    //=-=-=-=-=-=-=-=-=-=-=-
+                }
+                
+
+                
+                if ($status === 1) {
+                    $this->Session->setFlash('<div class="alert alert-success alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    Item successfully activated.
+                  </div>');
+                } else {
+                    $this->Session->setFlash('<div class="alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    Item successfully de-activated.
+                  </div>');
+                }
+            } else {
+                $this->Session->setFlash('<div class="alert alert-danger alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                Oops! Something went wrong. Please try again later.
+              </div>');
+            }
+            return $this->redirect(array('controller' => 'items', 'action' => 'view'));
+        }
+    }
+
     //=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     public function editChildItem()
     {
@@ -567,7 +617,16 @@ class ItemsController extends AppController
             $tmp = [];
             $tmp['Item']['del_flag'] = 1;
             $this->Item->id = $data['child_item_id'];
-            if ($this->Item->save($tmp)) {
+
+            if ($this->Item->save($tmp)) {                
+                //INDEX THIS ITEM
+                try {
+                    $all_items = new AllItemsController;
+                    // Call a method from
+                    $all_items->index_one($data['child_item_id']);
+                } catch(Exception $err) {}
+                //=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
                 $res = new ResponseObject ( ) ;
                 $res -> status = 'success' ;
                 $res -> message = 'Child Item removed.' ;

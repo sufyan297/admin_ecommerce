@@ -120,6 +120,7 @@
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th>Category</th>
+                                <th>Options</th>
                                 <th>Edit</th>
                                 <th>Delete</th>
       			              </tr>
@@ -148,6 +149,13 @@
                                 </td>
                                 <td>
                                     <?= $data['ItemCategory']['name'] ?>
+                                </td>
+                                <td>
+                                    <?php if ($data['Item']['is_active'] == 1): ?>
+                                        <?= $this->Html->link('Disable' ,array('controller'=>'items','action'=>'toggle_item/'.$data['Item']['id'].'/0'),array('class'=>'btn btn-danger btn-circle btn-sm', 'escape' => false)); ?>
+                                    <?php else: ?>
+                                        <?= $this->Html->link('Enable' ,array('controller'=>'items','action'=>'toggle_item/'.$data['Item']['id'].'/1'),array('class'=>'btn btn-success btn-circle btn-sm', 'escape' => false)); ?>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
                                     <?php
