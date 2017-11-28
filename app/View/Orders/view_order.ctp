@@ -272,6 +272,8 @@
                                             <?php endforeach; ?>
                                             )
                                             <br/>
+                                            <b>Product SKU:</b> <?= $data['item_sku_code'] ?>
+                                            <br/>
                                             <b>Seller:</b> <?= $data['seller_name'] ?> &nbsp;&nbsp;&nbsp;
                                             <b>Seller SKU:</b> <?= $data['seller_sku_code'] ?>
                                         </td>
