@@ -391,7 +391,7 @@
     <div class="row">
         <div class="col-md-12">
             <button class="btn btn-success pull-right" ng-click="addChildItem()">
-                <i class="fa fa-plus"></i> Add Child Item
+                <i class="fa fa-plus"></i> Add Item Combination
             </button>
         </div>
     </div>
@@ -408,7 +408,7 @@
 		<div class="col-md-12" ng-repeat="var in variants track by $index" ng-init="var_idx = $index">
 			<div class="box box-primary">
 				<div class="box-header with-border">
-	            <h3 class="box-title">Child Item {{var_idx + 1}}</h3>
+	            <h3 class="box-title">Item Combination {{var_idx + 1}}</h3>
 
 		            <div class="box-tools pull-right">
 		                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -429,13 +429,13 @@
 						<div class="col-md-6">
 							<div class="form-group">
 								<input id="inputFeatured{{var.id}}" type="checkbox" ng-model="var.is_featured" /> 							
-								<label for="inputFeatured{{var.id}}"><h4>Featured Item?</h4></label>
+								<label for="inputFeatured{{var.id}}"><h4>Show on homepage?<small>(Featured item)</small></h4></label>
 							</div>
 						</div>
                     </div>
 
                     <h5>
-                        <b>Qty limit to be purchased at a time:</b>
+                        <b>Qty limit for item to be purchased in one order:</b>
                     </h5>
                     <div class="row">
                         <div class="col-md-2">
@@ -700,19 +700,19 @@
                         </div> -->
                         <div class="col-md-offset-8 col-md-4" ng-if="var.id === null">
                             <button class="btn btn-success btn-block" ng-click="addChildItem_DB(var)">
-                                <i class="fa fa-plus"></i> Add Child Item
+                                <i class="fa fa-plus"></i> Add Item Combination
                             </button>
                         </div>
 
                         <div class="col-md-offset-4 col-md-4" ng-if="var.id !== null">
                             <button class="btn btn-warning btn-block" ng-click="addChildItem_DB(var)">
-                                <i class="fa fa-pencil"></i> Edit Child Item
+                                <i class="fa fa-pencil"></i> Edit Item Combination
                             </button>
                         </div>
 
                         <div class="col-md-4" ng-if="var.id !== null">
                             <button class="btn btn-danger btn-block" ng-click="removeChildItem_DB(var)">
-                                <i class="fa fa-times"></i> Remove Child Item
+                                <i class="fa fa-times"></i> Remove Item Combination
                             </button>
                         </div>
 		            </div>
