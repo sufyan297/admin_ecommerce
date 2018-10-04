@@ -14,8 +14,8 @@ class ItemPhoto extends Model
                     'storagePath' => 's3', //local or s3
                     'aws' => [
                         'region' => 'ap-southeast-1',
-                        'key' =>  'AKIAJ6D5EZV5AYI4MBFA',
-                        'secret' =>  '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',
+                        'key' =>  '',
+                        'secret' =>  '',
                         'bucket' =>  'krerum-prod',
                         'prefix_path' => 'files/', //make sure to end path with dir seperator '/'
                         'original_upload' => true //Upload original image?
